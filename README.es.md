@@ -40,7 +40,7 @@ Qué programa fija qué versión: [`docs/consumidores.md`](docs/consumidores.md)
 
 ## Desarrollo
 
-Hace falta Python 3.11 o posterior (la CI corre 3.11, 3.12 y 3.13 en Linux, Windows y macOS) y git.
+Hace falta Python 3.11 o posterior (la CI corre 3.11, 3.12 y 3.13 en Linux y Windows, y 3.12 en macOS) y git.
 
 ```powershell
 py -3.14 -m venv .venv

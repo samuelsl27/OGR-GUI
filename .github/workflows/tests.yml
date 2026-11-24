@@ -17,11 +17,21 @@ jobs:
       matrix:
         # The three platforms the programs ship on: the pieces here are
         # what a window looks like and how it behaves, and Qt is not the
-        # same library on each. 3.11 is the floor pyproject.toml declares
-        # (OGR Slip2D's 3.11 job was the only one failing for five releases
-        # on a PEP 701 f-string), 3.13 the ceiling the suite tests.
-        os: [ubuntu-latest, windows-latest, macos-15]
+        # same library on each (the first run of 0.1.0 found a drop-down
+        # born with another focus policy on macOS). 3.11 is the floor
+        # pyproject.toml declares (OGR Slip2D's 3.11 job was the only one
+        # failing for five releases on a PEP 701 f-string), 3.13 the
+        # ceiling the suite tests.
+        os: [ubuntu-latest, windows-latest]
         python: ["3.11", "3.12", "3.13"]
+        # macOS with one Python only (the owner's decision of 2026-11-24):
+        # GitHub's macOS runners were short of capacity, and six of the
+        # first eleven macOS jobs were cancelled before they started ("not
+        # acquired by Runner"). One job keeps the platform tested; a
+        # cancelled one is re-run, it is not a red of the code.
+        include:
+          - os: macos-15
+            python: "3.12"
 
     steps:
       # v7: the first majors on `node24` were v5/v6, and v7 is what the

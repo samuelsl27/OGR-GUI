@@ -50,7 +50,7 @@ Which program pins which version: [`docs/consumidores.md`](docs/consumidores.md)
 
 ## Development
 
-You need Python 3.11 or newer (CI runs 3.11, 3.12 and 3.13 on Linux, Windows and macOS) and git.
+You need Python 3.11 or newer (CI runs 3.11, 3.12 and 3.13 on Linux and Windows, and 3.12 on macOS) and git.
 
 ```bash
 git clone https://github.com/samuelsl27/OGR-GUI.git

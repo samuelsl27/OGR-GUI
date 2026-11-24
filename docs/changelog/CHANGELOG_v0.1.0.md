@@ -91,7 +91,9 @@ estas piezas, rehechos sin su ventana principal ni su motor (cada archivo dice d
 qué se quedó fuera, y por qué); el resto, de las interfaces nuevas (`SnapShape`, `ContourField`,
 `RangePreset`, `install_progress`, `Preferences`, `register`) y del repositorio: licencia, capas,
 versión, fuentes, nombres de productos, suelo de Python y acciones de la CI. La CI corre la suite
-en Linux, Windows y macOS con Python 3.11, 3.12 y 3.13. Su primera corrida en macOS falló un
+en Linux y Windows con Python 3.11, 3.12 y 3.13, y en macOS con 3.12: los ejecutores de macOS
+de GitHub iban cortos, seis de los once primeros trabajos de macOS se cancelaron sin arrancar, y la
+propietaria decidió (2026-11-24) dejar uno solo. Su primera corrida en macOS falló un
 test, el mismo en las tres versiones: pedía que la guarda de la rueda dejara cada desplegable en
 `StrongFocus`, y en macOS un desplegable no editable nace con `TabFocus` (Qt no le da el foco con
 la rueda en esa plataforma), que la guarda no toca porque no hace falta. El test pide ahora lo que

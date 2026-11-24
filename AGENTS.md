@@ -104,7 +104,7 @@ Las mismas reglas que el núcleo (`AGENTS.md` de OGR-Core, «Un núcleo y varios
 - **Cada programa fija una etiqueta `vX.Y.Z` y la sube a propósito**, en un commit suyo
   (`ogr-gui @ git+https://github.com/samuelsl27/OGR-GUI@vX.Y.Z`). Nunca una rama.
 - **Un solo `main`**, siempre publicable. Cada cambio, en una rama corta `dev/…` con su PR; la CI
-  corre la suite en Linux, Windows y macOS. La rama se borra al fusionarse, en GitHub y en local;
+  corre la suite en Linux, Windows y macOS (este, con un solo Python). La rama se borra al fusionarse, en GitHub y en local;
   una sin fusionar, solo con el OK de la propietaria, y antes se archiva en `archivo/<nombre>` si
   lleva algo que `main` no tiene.
 - **Antes de etiquetar**, la suite entera de este repositorio y la de cada programa de
