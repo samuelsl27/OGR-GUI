@@ -1,7 +1,7 @@
 # Stack
 
-> **Estado: propuesta (2026-11-24), pendiente de la aprobación de la propietaria.** Las del nombre
-> del paquete, la del núcleo y la de macOS ya las tomó la propietaria el 2026-11-24.
+> **Aprobada por la propietaria (2026-11-24).** Las decisiones del nombre del paquete, del
+> núcleo y de macOS las había tomado ya ese mismo día.
 
 | Decisión | Por qué | Alternativa descartada |
 |---|---|---|

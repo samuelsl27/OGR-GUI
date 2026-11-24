@@ -1,6 +1,6 @@
 # Hoja de ruta
 
-> **Estado: propuesta (2026-11-24), pendiente de la aprobación de la propietaria.** Al empezar una
+> **Aprobada por la propietaria (2026-11-24).** Al empezar una
 > spec se añade aquí; al terminarla se marca hecha. El orden lo decide la propietaria.
 
 ## Hecho

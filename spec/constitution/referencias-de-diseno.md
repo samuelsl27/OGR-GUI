@@ -1,6 +1,6 @@
 # Referencias de diseño de la suite
 
-> **Estado: propuesta (2026-11-24), pendiente de la aprobación de la propietaria.** Parte de la
+> **Aprobada por la propietaria (2026-11-24).** Parte de la
 > constitución de OGR-GUI. Se consulta antes de añadir o cambiar cualquier pieza de `ogr_ui`
 > (un tema, un color, un icono, un diálogo, un widget, un texto) y al revisar una.
 

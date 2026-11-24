@@ -1,6 +1,6 @@
 # Principios innegociables
 
-> **Estado: propuesta (2026-11-24), pendiente de la aprobación de la propietaria.**
+> **Aprobada por la propietaria (2026-11-24).**
 
 Toda spec, plan y tarea de OGR-GUI los cumple. Si una tarea no puede cumplir alguno, se para y se
 pregunta a la propietaria. Las reglas de detalle están en [`AGENTS.md`](../../AGENTS.md).

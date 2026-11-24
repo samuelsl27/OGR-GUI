@@ -1,6 +1,6 @@
 # Misión
 
-> **Estado: propuesta (2026-11-24), pendiente de la aprobación de la propietaria.**
+> **Aprobada por la propietaria (2026-11-24).**
 
 OGR-GUI es la **biblioteca de interfaz común** de la suite OpenGeoRock: las piezas de Qt que hacen
 que los programas de la suite se vean y se comporten igual, para que un ingeniero que sabe usar
