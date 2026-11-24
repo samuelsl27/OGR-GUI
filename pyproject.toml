@@ -1,0 +1,63 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ogr-gui"
+# Its own series from 0.1.0. The pieces come from OGR Slip2D v0.1.486
+# (commit 03b6c2d), copied without touching it (ADR-0005 of OGR FEM2D).
+version = "0.1.0"
+description = "OGR GUI — the interface pieces the programs of the OpenGeoRock Suite share: themes, icons, tr(), snap engine, status bar, legend, contours, background tasks"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "AGPL-3.0-or-later"}
+authors = [
+    {name = "Samuel Sáez López", email = "samuel.saez@edu.upct.es"},
+]
+keywords = ["geotechnical", "Qt", "PySide6", "GUI"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering",
+]
+
+# What ogr_ui imports, and nothing else. NOT ogr-core: a program pins its
+# own tag of the core, and pip refuses two different git references to the
+# same distribution, so a pin here would force every program onto ours
+# (the owner's decision of 2026-11-24). The two pieces that read the core
+# in OGR Slip2D take what they need through a small interface instead
+# (ogr_ui.canvas.snap_engine.SnapShape, ogr_ui.background.install_progress).
+dependencies = [
+    # As OGR Slip2D v0.1.486 (its D395): 6.12.0 on Python 3.11 takes one
+    # reference from None on nearly every QGraphicsItem setter on Linux,
+    # and on 3.11 None is not immortal yet, so a program aborts.
+    "PySide6>=6.6,!=6.12.0; python_version < '3.12'",
+    "PySide6>=6.6; python_version >= '3.12'",
+    # MIT; the Font Awesome Free icons it ships are CC BY 4.0 and its fonts
+    # SIL OFL 1.1 (THIRD_PARTY.md).
+    "qtawesome>=1.3",
+    # The non-modal XY chart (ogr_ui.xy_chart).
+    "matplotlib>=3.8",
+]
+
+[project.optional-dependencies]
+# The suite's test runner and its leak check live in OGR Core
+# (ogr_core.testing): only this repository's own tests need it, never a
+# program that uses ogr-gui. tests/_runner.py checks the core it runs on is
+# this tag.
+test = ["ogr-core @ git+https://github.com/samuelsl27/OGR-Core@v0.2.8"]
+
+[project.urls]
+Homepage = "https://opengeorock.org"
+Repository = "https://github.com/samuelsl27/OGR-GUI"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["ogr_ui*"]
+
+[tool.black]
+line-length = 100

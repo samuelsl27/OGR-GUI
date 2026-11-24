@@ -1,0 +1,289 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Copyright (C) 2026 Samuel Sáez López — Universidad Politécnica de Cartagena
+"""
+Colour scale legend and status indicators — Interpret phase I1.
+
+Two widgets the post-processor specification calls for and the window
+lacked:
+
+**ColourScaleLegend** — the vertical colour bar that maps colour to
+numeric value. It replaces a hand-written HTML table whose bands were
+hard-coded, and which therefore said the same thing whatever the results
+actually contained. Being generated from the live colour function means
+the legend can never disagree with what is drawn on the canvas: both ask
+the same object for the colour of a value.
+
+**StatusIndicators** — the clickable SNAP / GRID / ORTHO / OSNAP and
+DATA TIPS labels of the status bar, plus the coordinate read-out. The
+specification is explicit that these must be **toggleable by clicking the
+words**, not only from a dialog, and that the two routes stay in sync.
+
+Author: Samuel Sáez López (UPCT)
+"""
+from __future__ import annotations
+
+from PySide6.QtCore import QRect, QRectF, Qt, Signal
+from PySide6.QtGui import QColor, QFont, QLinearGradient, QPainter, QPen
+from PySide6.QtWidgets import QLabel, QSizePolicy, QWidget
+
+from ogr_ui.i18n import tr
+from ogr_ui.themes import theme_color
+
+
+class ColourScaleLegend(QWidget):
+    """Vertical colour bar mapping colours to numeric values.
+
+    The bar is drawn from a **colour function** rather than a fixed list
+    of bands, so it always agrees with the canvas: whatever colours the
+    result, colours the legend.
+    """
+
+    def __init__(self, parent=None) -> None:
+        super().__init__(parent)
+        self._vmin = 0.0
+        self._vmax = 3.0
+        self._title = ""                # the program says what it maps
+        self._colour_fn = None
+        self._steps = 10
+        self._decimals = 2
+        self._scientific = False
+        self._mark = None            # value to flag on the bar
+        # v0.1.82 — when the contour settings are banded, the legend
+        # draws the bands themselves instead of a gradient. A gradient
+        # invites the reader to interpolate a colour that the plot never
+        # produces; the reference legend is a stack of flat swatches for
+        # exactly that reason.
+        self._bands = None           # list of colours, low → high
+        self._labels = None          # len(bands) + 1 boundary labels
+        self.setMinimumWidth(96)
+        self.setMinimumHeight(180)
+        self.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Expanding)
+
+    # ------------------------------------------------------------------
+    def configure(self, vmin, vmax, colour_fn, title=None, steps=None,
+                  decimals=None, scientific=None, mark=None,
+                  bands=None, labels=None) -> None:
+        """Set the range and the colour function.
+
+        ``colour_fn`` takes a value and returns anything QColor accepts.
+        ``bands`` (low → high) switches the bar to flat swatches, and
+        ``labels`` supplies the ``len(bands) + 1`` boundary texts — which
+        is how the top one can read "6.000+" rather than claiming the
+        scale stops there.
+        """
+        if vmax <= vmin:
+            vmax = vmin + 1.0
+        self._vmin, self._vmax = float(vmin), float(vmax)
+        self._colour_fn = colour_fn
+        self._bands = list(bands) if bands else None
+        self._labels = list(labels) if labels else None
+        if title is not None:
+            self._title = title
+        if steps is not None:
+            self._steps = max(2, int(steps))
+        if decimals is not None:
+            self._decimals = max(0, int(decimals))
+        if scientific is not None:
+            self._scientific = bool(scientific)
+        self._mark = mark
+        self.update()
+
+    def title_font(self) -> QFont:
+        """The font the title is painted in: the widget's, 1 pt smaller."""
+        font = QFont(self.font())
+        font.setPointSizeF(max(7.0, font.pointSizeF() - 1.0))
+        return font
+
+    def title_rect(self, width: int) -> QRect:
+        """The room the title takes at ``width``, wrapped by words."""
+        from PySide6.QtGui import QFontMetrics
+        return QFontMetrics(self.title_font()).boundingRect(
+            QRect(0, 0, width, 10000),
+            int(Qt.AlignLeft | Qt.AlignTop | Qt.TextWordWrap), self._title)
+
+    def value_range(self):
+        return self._vmin, self._vmax
+
+    def format_value(self, v: float) -> str:
+        if self._scientific:
+            return f"{v:.{self._decimals}e}"
+        return f"{v:.{self._decimals}f}"
+
+    # ------------------------------------------------------------------
+    def paintEvent(self, _event) -> None:  # noqa: N802
+        p = QPainter(self)
+        p.setRenderHint(QPainter.Antialiasing, True)
+        w, h = self.width(), self.height()
+
+        font = QFont(self.font())
+        font.setPointSizeF(max(7.0, font.pointSizeF() - 1.0))
+        p.setFont(font)
+        fm = p.fontMetrics()
+
+        # v0.1.421 (D363) -- the title on as many lines as the width asks:
+        # on one it was cut at 96 px («Factor de segu» of 153 px in Spanish)
+        title_h = self.title_rect(w).height() + 4
+        p.setPen(QPen(self.palette().windowText().color()))
+        p.drawText(QRectF(0, 0, w, title_h),
+                   Qt.AlignLeft | Qt.AlignTop | Qt.TextWordWrap, self._title)
+
+        bar_w = 20
+        top = title_h + 4
+        bottom = h - 4
+        bar = QRectF(2, top, bar_w, max(bottom - top, 10))
+
+        if self._colour_fn is None:
+            p.end()
+            return
+
+        n_bands = len(self._bands) if self._bands else 0
+        if n_bands:
+            # Flat swatches, low at the bottom, each separated so the
+            # boundaries are countable.
+            for i, colour in enumerate(self._bands):
+                y0 = bar.bottom() - (i + 1) / n_bands * bar.height()
+                y1 = bar.bottom() - i / n_bands * bar.height()
+                try:
+                    p.fillRect(QRectF(bar.left(), y0, bar.width(), y1 - y0),
+                               QColor(colour))
+                except Exception:  # noqa: BLE001
+                    pass
+            p.setPen(QPen(QColor("#404040"), 1))
+            for i in range(1, n_bands):
+                y = bar.bottom() - i / n_bands * bar.height()
+                p.drawLine(int(bar.left()), int(y), int(bar.right()), int(y))
+        else:
+            # A gradient sampled from the same function the canvas uses,
+            # so a non-linear colour map is reproduced faithfully instead
+            # of being approximated by two end colours.
+            grad = QLinearGradient(bar.left(), bar.bottom(),
+                                   bar.left(), bar.top())
+            samples = 32
+            for i in range(samples + 1):
+                t = i / samples
+                value = self._vmin + t * (self._vmax - self._vmin)
+                try:
+                    grad.setColorAt(t, QColor(self._colour_fn(value)))
+                except Exception:  # noqa: BLE001
+                    grad.setColorAt(t, QColor("#888888"))
+            p.fillRect(bar, grad)
+        p.setPen(QPen(QColor("#404040"), 1))
+        p.drawRect(bar)
+
+        # Tick labels. With 24 bands every boundary would need a label and
+        # they would overprint each other, so labels are thinned until
+        # they fit — the reference legend does the same, labelling every
+        # second band.
+        p.setPen(QPen(self.palette().windowText().color()))
+        n_ticks = n_bands if n_bands else self._steps
+        stride = 1
+        while (n_ticks / stride) > max(bar.height() / (fm.height() + 2), 2):
+            stride += 1
+        for i in range(0, n_ticks + 1, stride):
+            t = i / n_ticks
+            y = bar.bottom() - t * bar.height()
+            if self._labels and i < len(self._labels):
+                text = self._labels[i]
+            else:
+                text = self.format_value(
+                    self._vmin + t * (self._vmax - self._vmin))
+            p.drawLine(int(bar.right()), int(y), int(bar.right()) + 4,
+                       int(y))
+            p.drawText(QRectF(bar.right() + 6, y - fm.height() / 2,
+                              w - bar.right() - 8, fm.height()),
+                       Qt.AlignLeft | Qt.AlignVCenter, text)
+
+        # Marker for a value of interest (the critical factor of safety)
+        if self._mark is not None and self._vmax > self._vmin:
+            t = (float(self._mark) - self._vmin) / (self._vmax - self._vmin)
+            if 0.0 <= t <= 1.0:
+                y = bar.bottom() - t * bar.height()
+                p.setPen(QPen(QColor("#000000"), 2))
+                p.drawLine(int(bar.left()) - 2, int(y),
+                           int(bar.right()) + 2, int(y))
+        p.end()
+
+
+# ======================================================================
+class ToggleLabel(QLabel):
+    """A status-bar word that toggles a boolean when clicked."""
+
+    toggled = Signal(bool)
+
+    def __init__(self, text: str, state: bool = False, parent=None):
+        super().__init__(parent)
+        self._text = text
+        self._state = bool(state)
+        self.setCursor(Qt.PointingHandCursor)
+        # v0.1.321 (D300) — the name is also the key of the indicator
+        # (StatusIndicators.state): only the shown text is translated.
+        self.setToolTip(tr("Click to toggle %s") % tr(text))
+        self._refresh()
+
+    def _refresh(self) -> None:
+        on = self._state
+        self.setText(tr(self._text))
+        # Enabled reads solid, disabled reads greyed: the state must be
+        # legible at a glance without reading the word twice.
+        self.setStyleSheet(
+            "QLabel { padding: 0 6px; font-weight: %s; color: %s; }"
+            % ("bold" if on else "normal", theme_color("ink") if on else theme_color("disabled")))
+
+    def state(self) -> bool:
+        return self._state
+
+    def setState(self, on: bool) -> None:  # noqa: N802
+        on = bool(on)
+        if on == self._state:
+            return
+        self._state = on
+        self._refresh()
+        self.toggled.emit(on)
+
+    def mousePressEvent(self, event) -> None:  # noqa: N802
+        if event.button() == Qt.LeftButton:
+            self.setState(not self._state)
+        super().mousePressEvent(event)
+
+
+class StatusIndicators:
+    """The status-bar cluster: coordinates plus the toggle words.
+
+    Kept as a plain holder rather than a widget so a window can place the
+    pieces where it wants while still driving them as one group.
+    """
+
+    NAMES = ("DATA TIPS", "SNAP", "GRID", "ORTHO", "OSNAP")
+
+    def __init__(self, status_bar, initial=None) -> None:
+        self.status_bar = status_bar
+        initial = initial or {}
+        self.coords = QLabel("X: 0.000   Y: 0.000")
+        self.coords.setMinimumWidth(170)
+        status_bar.addPermanentWidget(self.coords)
+        self.labels: dict = {}
+        for name in self.NAMES:
+            lab = ToggleLabel(name, bool(initial.get(name, False)))
+            status_bar.addPermanentWidget(lab)
+            self.labels[name] = lab
+
+    # ------------------------------------------------------------------
+    def set_coordinates(self, x: float, y: float) -> None:
+        self.coords.setText(f"X: {x:.3f}   Y: {y:.3f}")
+
+    def state(self, name: str) -> bool:
+        lab = self.labels.get(name)
+        return bool(lab and lab.state())
+
+    def set_state(self, name: str, on: bool) -> None:
+        lab = self.labels.get(name)
+        if lab is not None:
+            lab.setState(on)
+
+    def connect(self, name: str, slot) -> None:
+        lab = self.labels.get(name)
+        if lab is not None:
+            lab.toggled.connect(slot)
+
+    def states(self) -> dict:
+        return {n: self.state(n) for n in self.NAMES}

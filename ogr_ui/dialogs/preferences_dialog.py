@@ -1,0 +1,92 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Copyright (C) 2026 Samuel Sáez López — Universidad Politécnica de Cartagena
+"""
+Preferences dialog.
+
+Small application-wide settings: active language, active theme and a
+few display toggles. Kept deliberately narrow — per-project settings
+live in :class:`ProjectSettingsDialog`.
+
+Author: Samuel Sáez López (UPCT)
+"""
+from __future__ import annotations
+
+from PySide6.QtCore import Qt, Signal
+from PySide6.QtWidgets import (
+    QComboBox,
+    QDialog,
+    QDialogButtonBox,
+    QFormLayout,
+    QGroupBox,
+    QVBoxLayout,
+)
+
+from ogr_ui.i18n import available_languages, current_language, tr
+from ogr_ui.themes import THEMES
+
+
+class PreferencesDialog(QDialog):
+    language_changed = Signal(str)
+    theme_changed = Signal(str)
+
+    def __init__(self, parent=None, active_theme: str = "light") -> None:
+        super().__init__(parent)
+        # v0.1.421 (D363) -- the window's name, not the menu entry's «...»
+        self.setWindowTitle(tr("Preferences"))
+        self.setMinimumWidth(380)
+        root = QVBoxLayout(self)
+
+        # --- General group --------------------------------------------
+        # v0.1.325 (D318) — the group holds the language and the theme:
+        # it was titled «File» («Archivo»)
+        gen = QGroupBox(tr("Interface"))
+        form = QFormLayout(gen)
+        self.cbo_language = QComboBox()
+        for code in available_languages():
+            label = {"en": "English", "es": "Español"}.get(code, code)
+            self.cbo_language.addItem(label, code)
+        idx = self.cbo_language.findData(current_language())
+        self.cbo_language.setCurrentIndex(idx if idx >= 0 else 0)
+        form.addRow(tr("Language") + ":", self.cbo_language)
+
+        self.cbo_theme = QComboBox()
+        for key in THEMES:
+            self.cbo_theme.addItem(tr(key.capitalize()), key)
+        idx = self.cbo_theme.findData(active_theme)
+        self.cbo_theme.setCurrentIndex(idx if idx >= 0 else 0)
+        form.addRow(tr("Theme") + ":", self.cbo_theme)
+
+        root.addWidget(gen)
+
+        # v0.1.317 (D299) — the "Display Options..." group is gone. Its three
+        # check boxes were read and saved by nothing (rule 7): there are no
+        # tabbed windows, importing ALWAYS marks the project modified (every
+        # import is an undo step since 0.1.302), and the .ogr has no
+        # compressed format. Every control left here is read by _accept.
+
+        # --- Buttons --------------------------------------------------
+        buttons = QDialogButtonBox(
+            QDialogButtonBox.Save | QDialogButtonBox.Cancel
+        )
+        buttons.accepted.connect(self._accept)
+        buttons.rejected.connect(self.reject)
+        root.addWidget(buttons)
+
+    # ------------------------------------------------------------------
+    def _accept(self) -> None:
+        lang = self.cbo_language.currentData()
+        theme = self.cbo_theme.currentData()
+        # v0.1.418 (D355) — closed FIRST, then the window is told. The notice
+        # «Language changed…» opened over this dialog, still on screen, with
+        # its buttons already in the new language (Qt's catalogue switches
+        # before the notice) and its title and labels in the old one; in
+        # Windows the notice, child of the main window, could fall behind it.
+        # Closing does not change the active language, so the guard below
+        # still compares with the language the dialog was opened in.
+        self.accept()
+        # v0.1.291 (D290b) — only a CHANGE of language is announced: every
+        # Save emitted it, and since D290 the window answers with «Language
+        # changed. Restart…», which a theme change made false.
+        if lang != current_language():
+            self.language_changed.emit(lang)
+        self.theme_changed.emit(theme)
