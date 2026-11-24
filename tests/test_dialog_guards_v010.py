@@ -597,11 +597,27 @@ class TestTheWheel:
                 _dispose(d)
 
     def test_boxes_lose_wheel_focus_and_nothing_else_does(self):
+        """The wheel focuses no box. A box whose platform gives it
+        ``WheelFocus`` gets ``StrongFocus``; one that never had it keeps
+        what the platform gives (on macOS a drop-down is not focused by the
+        wheel to begin with, and the CI of 0.1.0 failed asserting
+        ``StrongFocus`` there)."""
+        from PySide6.QtWidgets import QComboBox, QDoubleSpinBox
+        default = {}
+        for name, cls in (("spin", QDoubleSpinBox), ("combo", QComboBox)):
+            w = cls()                    # unguarded, never polished
+            default[name] = w.focusPolicy()
+            w.deleteLater()
         with _Guarded():
             d = _form()
             try:
-                for w in (d.first, d.second, d.combo):
-                    assert w.focusPolicy() == Qt.FocusPolicy.StrongFocus, w
+                for w, name in ((d.first, "spin"), (d.second, "spin"),
+                                (d.combo, "combo")):
+                    want = (Qt.FocusPolicy.StrongFocus
+                            if default[name] == Qt.FocusPolicy.WheelFocus
+                            else default[name])
+                    assert w.focusPolicy() == want, (w, default[name])
+                    assert w.focusPolicy() != Qt.FocusPolicy.WheelFocus, w
                 assert d.listing.focusPolicy() == Qt.FocusPolicy.WheelFocus
             finally:
                 _dispose(d)

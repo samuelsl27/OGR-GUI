@@ -91,7 +91,11 @@ estas piezas, rehechos sin su ventana principal ni su motor (cada archivo dice d
 qué se quedó fuera, y por qué); el resto, de las interfaces nuevas (`SnapShape`, `ContourField`,
 `RangePreset`, `install_progress`, `Preferences`, `register`) y del repositorio: licencia, capas,
 versión, fuentes, nombres de productos, suelo de Python y acciones de la CI. La CI corre la suite
-en Linux, Windows y macOS con Python 3.11, 3.12 y 3.13.
+en Linux, Windows y macOS con Python 3.11, 3.12 y 3.13. Su primera corrida en macOS falló un
+test, el mismo en las tres versiones: pedía que la guarda de la rueda dejara cada desplegable en
+`StrongFocus`, y en macOS un desplegable no editable nace con `TabFocus` (Qt no le da el foco con
+la rueda en esa plataforma), que la guarda no toca porque no hace falta. El test pide ahora lo que
+la guarda promete: que la rueda no dé el foco a ninguna caja, y que solo cambie la que lo tenía.
 
 La suite de OGR Slip2D no se ha tocado ni corrido: ningún archivo suyo ha cambiado por esta
 versión (sus piezas son las de `03b6c2d`, comprobado con `git diff`, y las 71 traducciones son
