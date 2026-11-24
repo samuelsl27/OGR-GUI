@@ -25,6 +25,19 @@ Autor y titular del copyright: Samuel Sáez López (UPCT). Licencia AGPL-3.0-or-
 
 ---
 
+## Antes de nada
+
+- Trabajo guiado por especificaciones (SDD, abajo «Flujo SDD»): la constitución en
+  `spec/constitution/` (misión, principios, stack, hoja de ruta y **referencias de diseño**) y una
+  carpeta por cambio en `spec/features/NNN-nombre/` con `spec.md`, `plan.md` y `tasks.md`.
+- **Antes de añadir, cambiar o revisar cualquier pieza** (un tema, un color, un icono, un widget, un
+  diálogo, un texto), las referencias de diseño de la suite:
+  [`spec/constitution/referencias-de-diseno.md`](spec/constitution/referencias-de-diseno.md). Son la
+  base común de las guías de interfaz de los programas (la de FEM2D y la de OGR Data), con los
+  principios D-1…D-14, lo que no se hace, lo que falta y la lista por pieza.
+- Repositorio público `samuelsl27/OGR-GUI`. Las contribuciones se aceptan con el CLA de la suite
+  (`CLA.md`, `CONTRIBUTING.md`).
+
 ## Stack
 
 - **Lenguaje**: Python 3.11+, con anotaciones de tipo donde aclaren.
@@ -82,6 +95,9 @@ py -3.14 -m venv .venv                                  # Windows; en otro siste
 | `ogr_ui/testing/` | Las comprobaciones de las reglas 2 (`texts`) y 3 (`menus`) para los tests de cada programa |
 | `tests/` | Un archivo por pieza |
 | `docs/` | Changelog y `consumidores.md` |
+| `spec/constitution/` | Misión, principios, stack, hoja de ruta y referencias de diseño |
+| `spec/features/NNN-nombre/` | `spec.md`, `plan.md` y `tasks.md` de cada cambio; `000-plantilla/` |
+| `.claude/skills/` | Las fases del flujo SDD y la revisión de diseño como *skills* de Claude Code (otros agentes las leen como texto) |
 
 ## Capas
 
@@ -112,6 +128,30 @@ Las mismas reglas que el núcleo (`AGENTS.md` de OGR-Core, «Un núcleo y varios
   árbol por delante en el `PYTHONPATH`). Suites de programas distintos pueden correr a la vez en
   este PC; dos del mismo, no.
 - **`docs/consumidores.md` al día**: qué fija cada programa y qué cambios están en curso.
+
+## Flujo SDD
+
+Metodología [hello-sdd](https://github.com/mouredev/hello-sdd), como el resto de la suite. Cada
+paso deja su artefacto en el repositorio y **termina esperando la aprobación explícita de la
+propietaria**.
+
+| # | Fase | Artefacto | Skill | Regla clave |
+|---|---|---|---|---|
+| 0 | Constitución | `spec/constitution/*.md` | — | Cambia poco y solo con OK |
+| 1 | Especificación | `spec/features/NNN-x/spec.md` | `/sdd-spec` | Qué y por qué; RF en EARS; sin código ni stack; preguntas de una en una (máx. 6) |
+| 2 | Clarificación | Lista de dudas, luego `spec.md` corregido | `/sdd-clarify` | Solo detecta: ambigüedades, contradicciones, casos límite, choques con la constitución |
+| 3 | Plan | `plan.md` | `/sdd-plan` | Sin código; cada decisión con su alternativa descartada y sus RF |
+| 4 | Tareas | `tasks.md` | `/sdd-tasks` | ≤ 30 min, en orden, con RF y «Hecho cuando» |
+| 5 | Implementación | Código + tests | `/sdd-implement Tn` | **Una tarea**, tests primero, suite en verde, marcar `[x]` y **parar** |
+| 6 | Validación | Informe RF → test → resultado | `/sdd-validate` | Veredicto con evidencia; la lista de diseño marcada; la CI en las tres plataformas |
+| 7 | Cambio | Diff de `spec.md` | `/sdd-spec` | **Primero la spec**, se enseña el diff, luego el código |
+
+Además, `/design-review` revisa una pieza contra las referencias de diseño y devuelve hallazgos, no
+arreglos.
+
+Una petición de un programa (como la de FEM2D que dio la spec 001) entra por la fase 1. Al empezar
+una spec se añade a `spec/constitution/roadmap.md`; al terminarla, se marca hecha allí. La spec 001
+se escribió después de hacer la 0.1.0, al adoptar este flujo; desde la 002, primero la spec.
 
 ## Las siete reglas de la suite
 
@@ -148,12 +188,19 @@ Son las de OGR Slip2D. Cada una existe porque su ausencia causó un problema rea
     argumento (el nombre en `QSettings`, los campos de un contorno, el texto de una fase).
 11. **Los iconos llevan su atribución.** Los de Font Awesome Free son CC BY 4.0: `THIRD_PARTY.md`
     lo dice, y un test lo comprueba.
+12. **Toda pieza cumple las referencias de diseño**
+    ([`spec/constitution/referencias-de-diseno.md`](spec/constitution/referencias-de-diseno.md)): su
+    spec dice qué principios aplica y marca su lista al validar. Lo que una pieza existente no
+    cumple está en «Lo que falta» y en la hoja de ruta, no se arregla de paso.
+13. **La spec manda** (`spec/constitution/principles.md`): no se implementa nada que no esté en una
+    spec aprobada, y un cambio de requisitos cambia primero la spec.
 
 ---
 
 ## Flujo de trabajo
 
-- **Antes de una tarea no trivial, propón un plan y espera el OK de la propietaria.**
+- **Antes de una tarea no trivial, propón un plan y espera el OK de la propietaria**: en este
+  repositorio, el plan es la spec y su `plan.md` (arriba, «Flujo SDD»).
 - **Una tarea a la vez.** Al terminar, di qué cambiaste y qué probaste.
 - **Si no estás seguro al 80 %, pregunta. No inventes.**
 - Cada versión con su changelog en `docs/changelog/`, registrando **qué se encontró**, no solo qué
