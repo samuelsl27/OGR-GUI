@@ -73,6 +73,8 @@ ES: dict[str, str] = {
         'Tamaño del intervalo:',
     'Language':
         'Idioma',
+    'Left on, the range follows the data as results change, from the smallest value to the largest.':
+        'Activado, el rango sigue a los datos según cambian los resultados, del menor valor al mayor.',
     'Left on, the range follows the data as results change. The upper bound uses a percentile so a single extreme value cannot squash everything else into one band.':
         'Activado, el rango sigue a los datos según cambian los resultados. El límite superior usa un percentil para que un único valor extremo no aplaste todo lo demás en una sola banda.',
     'Light':

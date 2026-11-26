@@ -193,7 +193,9 @@ poder citarlos (`D-3`) en una spec, un test o una revisión.
 - La leyenda se pinta con la misma función que colorea el dibujo; en modo por bandas, una banda
   plana por intervalo, con la última abierta («6.000+»). El rango se elige por campo y es del
   programa (`ContourField`), igual que sus rangos de un clic (`RangePreset`).
-- El rango automático ignora los valores extremos con un percentil; el fijo se fija a propósito.
+- El rango automático es el del campo: recorta los extremos con el percentil que el programa le da
+  (0,98 si no da ninguno) o los incluye todos; el fijo se fija a propósito. (Enmendado el
+  2026-11-25 con la spec 002: antes, el percentil era para todos los campos.)
 - *Por qué*: la ley de semejanza y la de conexión; Deceptive Patterns, «Comparison prevention»
   (dos figuras con escalas distintas que parecen comparables).
 
