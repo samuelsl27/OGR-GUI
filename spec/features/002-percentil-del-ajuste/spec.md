@@ -169,4 +169,4 @@ valores con pico, en inglés y en español y en los dos temas: el máximo es 50,
 mide 334×577 en los cuatro casos, dentro de 1366×728; la ayuda es la de «del menor valor al mayor»
 en los dos idiomas. Ningún principio falla.
 
-CI de la PR en Linux, Windows y macOS: ver abajo.
+CI de la [PR #1](https://github.com/samuelsl27/OGR-GUI/pull/1), commit `29c207e`: en verde en Linux y Windows (Python 3.11, 3.12 y 3.13) y en macOS (3.12), y la licencia, en las dos corridas (push y PR).
