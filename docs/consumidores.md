@@ -55,6 +55,41 @@ Matplotlib), con `ogr_ui` en lugar de `ogr_gui`.
 | Spec 003: el español de los mensajes del núcleo | OGR FEM2D (y Slip2D al adoptar) | Hecha en la 0.1.2; FEM2D la adopta cuando suba su fijación (`CHANGELOG_v0.1.2.md`, sección 5) |
 | Spec 004: la entrada X,Y con relativos, polares y coma decimal | OGR FEM2D | Hecha en la 0.1.3; FEM2D la adopta cuando suba su fijación (`CHANGELOG_v0.1.3.md`, sección 4) |
 
+## Pendiente de OGR Slip2D, para cuando lo adopte
+
+Cambios de Slip2D en piezas con gemela aquí que **no** piden código en `ogr_ui`, sino una forma de
+escribirlos al adoptarlo. Se anotan al recibirlos; se tachan cuando Slip2D fije una versión.
+
+- **Slip2D 0.1.500 (`99b66f6`, D438), `ContourSettings.for_reported(caption)`.** La escala de
+  partida del campo del factor cuando la corrida informa de un Ky o de un desplazamiento de
+  Newmark. Es de dominio y no entra aquí: con `ogr_ui` 0.1.3 es un `ContourField` por magnitud,
+  que el programa da al diálogo según lo que informe la corrida
+  (comprobado el 2026-11-27 con `defaults()` y `fit_to(values, field.fit_percentile)`):
+  - Ky: `start=ContourSettings(palette="Hot to cold", intervals=8, auto_range=True, decimals=4)`,
+    con el `fit_percentile` de 0,98 por defecto. Rojo en el valor bajo;
+  - Newmark: lo mismo con `decimals=3, reverse=True` y `fit_percentile=1.0`. Rojo en el valor
+    alto, y el extremo no se recorta;
+  - factor: el `ContourField` del factor de siempre (0–6 en 24 bandas).
+
+  Al adoptarlo, dos cosas que en Slip2D 0.1.500 no cuadran (leídas en su código, no corridas; se
+  le dan escritas a su sesión): su diálogo de contornos ajusta siempre al 0,98 (al marcar el rango
+  automático, en *Fit* y en *Restore Defaults*, `contour_options_dialog.py` 234, 279, 289),
+  mientras el dibujo de una corrida Newmark ajusta al 1,0 (`interpret_window.py` 1037); y
+  *Restore Defaults* vuelve a `for_field("fos")`, el 0–6, no a `for_reported`. Con `ogr_ui` las
+  dos desaparecen solas si el `ContourField` que se da al diálogo es el de la magnitud de la
+  corrida. La marca de la leyenda (`ColourScaleLegend.configure(mark=...)`) no cambia: recibe el
+  Ky o el desplazamiento de la crítica en lugar del factor.
+- **Slip2D 0.1.497–0.1.501, `i18n`.** Las entradas nuevas son de catálogos del motor de Slip2D
+  (`method.newmark_record_missing`, `method.seismic_static_unstable*`, `stat.sens_no_range`), dos
+  *tooltips* del lienzo y la nota de la página Seismic. Ninguna es de `ogr_core`, así que nada va
+  a `ogr_ui/i18n/core_es.py`: se quedan en el diccionario de Slip2D, que las añade con
+  `add_translations()`. Tampoco iría allí la fila «Critical surface» del informe si OGR-Core la
+  saca: es un `T("...")` del informe, no un mensaje con código.
+- **El censo de términos retirados de Slip2D** (`\bFoS\b` sobre los valores en castellano) tomó el
+  campo `{fos:.4f}` por el término. Aquí no hay censo de términos; los que miran letras en un
+  texto quitan antes los campos (`ogr_ui.testing.texts._letters` y `wordless` de
+  `tests/test_core_messages_v012.py`). Si se añade uno, que haga lo mismo.
+
 ## Cómo pide un programa un cambio
 
 El código de `ogr_ui` solo se cambia en este repositorio. La sesión de un programa que necesita
