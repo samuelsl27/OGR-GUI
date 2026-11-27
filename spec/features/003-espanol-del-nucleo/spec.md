@@ -1,6 +1,6 @@
 # Spec 003 — El español de los mensajes del núcleo
 
-> Estado: aprobada (2026-11-27)
+> Estado: aprobada (2026-11-27); validada el 2026-11-27, por fusionar y etiquetar (v0.1.2)
 
 ## Contexto y objetivo
 
@@ -86,6 +86,17 @@ pocas más. OGR FEM2D (núcleo v0.2.9) no tiene ninguna.
   con el verbo, sin claves internas ni signos de exclamación» (este último, para las plantillas
   nuevas; las de Slip2D se toman como están). No aplica lo demás: no hay pieza visible nueva.
 
+Lista de comprobación (se marca al validar):
+
+- [x] No importa el núcleo ni ningún programa: `core_es.py` no importa nada (test), y
+      `test_layering_v010` en verde.
+- [x] Sus textos tienen su español: cada plantilla con palabras de los 20 catálogos (RF-1, RF-5).
+- [x] Las 98 nuevas: cortas, en presente, sin signos de exclamación, con los términos de Slip2D. Las
+      claves internas que aparecen (`project_id`, `--workdir`, `overwrite=true`, `{wait_op}(...)`)
+      son las del inglés, que el lector tiene que escribir tal cual.
+- [x] Probada sin pantalla y sin dejar estado (regla 5): el runner no ve fugas.
+- [x] Ninguno de los patrones de «Lo que no se hace».
+
 ## Qué cambia para los programas
 
 **Compatible** (sube el tercer número). Un programa que dice los mensajes del núcleo con `render` y
@@ -125,3 +136,37 @@ por RF-3, salvo las de RF-8 y RF-9, que el changelog lista).
 ## Dudas abiertas
 
 - Ninguna.
+
+## Validación
+
+2026-11-27, en la rama `dev/003-espanol-del-nucleo`, commit `6ac443f`. Suite entera sin filtrar:
+**467 casos, 467 en verde, sin fugas**, en serie y con `--jobs 4` (Windows, `ogr_core 0.2.12` del
+extra `[test]`). Los tests son de `tests/test_core_messages_v012.py` salvo donde se dice.
+
+| RF | Test que lo cubre | Resultado |
+|---|---|---|
+| RF-1 | `TestEveryTemplateIsTranslated.test_none_is_missing`; `TestTheCataloguesAreFound` (los 20 de la v0.2.12, y lo que no se importa no tiene catálogos); `test_the_singular_is_checked_too` | verde |
+| RF-2 | `TestNothingForTheProgramToDo` (`tr()`, `render(..., translate=tr)` con un error de `ogr_core.api`, `package_translations`, ninguna clave en las dos tablas, `core_es.py` sin importaciones); `tests/test_i18n_v010.py::test_package_translations_is_a_copy` | verde |
+| RF-3 | `TestTheWordsAreSlip2Ds.test_the_frozen_copy` (las 237 de `67faf4f`) | verde |
+| RF-4 | `TestTheFieldsAreTheTemplates` (cada traducción, y el comparador rechaza las malas) | verde |
+| RF-5 | `TestEveryTemplateIsTranslated.test_a_missing_one_is_named_with_its_catalogue_and_code` y `test_the_singular_is_checked_too` | verde |
+| RF-6 | `TestAWordlessTemplate` | verde |
+| RF-7 | `TestANewerCoreStaysInEnglish` | verde |
+| RF-8 | `TestTheWordsAreSlip2Ds.test_those_that_differ_do_and_are_in_the_changelog` (lista vacía: la búsqueda y la lectura a mano no encontraron ninguna; el changelog lo dice) | verde |
+| RF-9 | `TestTheWordsAreSlip2Ds.test_rf9_keeps_slip2ds_words` y `test_those_that_differ_do_and_are_in_the_changelog` | verde |
+
+Las de siempre, en verde: `test_i18n_v010` (con `IDENTICAL` ampliada), `test_layering_v010`,
+`test_license_v010`, `test_no_vendor_names_v010`, `test_version_v010` (0.1.2.dev0 con
+`PENDIENTE_v0.1.2.md`), `test_spec_v010`.
+
+Lista de diseño: marcada arriba. No hay pieza visible nueva, así que no hay capturas.
+
+CI de la [PR #2](https://github.com/samuelsl27/OGR-GUI/pull/2), commit `6ac443f`: en verde en Linux
+y Windows (Python 3.11, 3.12 y 3.13) y en macOS (3.12), y la licencia, en las dos corridas (push y
+PR).
+
+La suite entera de OGR FEM2D contra este árbol (por delante en el `PYTHONPATH`, con `--jobs 4`): 808
+casos, 806 en verde. `test_the_installed_one` falla como tiene que fallar (compara el `ogr_ui`
+instalado, v0.1.0, con este árbol). `test_gui_interpret_v0015.py::TestD15::test_case_005` es un test
+de tiempos de FEM2D: falla también solo y **con su propio `ogr_ui` v0.1.0** (2,74 s contra un límite
+de 2 s). No es de este cambio, y FEM2D tenía trabajo sin publicar en su árbol al correrla.

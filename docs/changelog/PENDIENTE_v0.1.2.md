@@ -67,6 +67,14 @@ plantilla de un núcleo más nuevo, que sale en inglés. `test_i18n_v010.py`:
 `test_package_translations_is_a_copy` pasa a esperar `ES` y `CORE_ES`, e `IDENTICAL` tiene las dos
 de arriba.
 
+467 casos en 25 archivos, en verde en Windows, en serie y con `--jobs 4`, sin fugas; la CI de la
+PR #2, en verde en Linux, Windows y macOS.
+
+La suite entera de OGR FEM2D (que fija la 0.1.0) contra este árbol: 808 casos, 806 en verde.
+`test_the_installed_one` falla por correr contra otro árbol, como en la 0.1.1. El otro,
+`test_gui_interpret_v0015.py::TestD15::test_case_005`, es un test de tiempos suyo que falla igual
+con su `ogr_ui` v0.1.0 instalado (2,74 s con un límite de 2 s en este PC): no es de este cambio.
+
 ## 4. Las 98 entradas nuevas, para leerlas
 
 Escritas en esta versión con la terminología de las de Slip2D («Los que hay», «tiene que ser»,

@@ -35,7 +35,7 @@ suite entera en verde. Una tarea cada vez.
   hacer cada programa), `docs/consumidores.md` y `roadmap.md` — RF-1–RF-9
   - Hecho cuando: los tres archivos dicen lo mismo que el plan, y la suite entera en verde.
   - Nota: la versión pasa a `0.1.2.dev0` en esta rama (la 0.1.1 está en `main`).
-- [ ] **T6** Validación final — RF-1–RF-9
+- [x] **T6** Validación final — RF-1–RF-9
   - Hecho cuando: cada RF tiene su test en verde en la tabla «Validación» de la spec, la lista de
     diseño de la spec está marcada, la suite entera pasa sin filtrar y sin fugas en serie y con
     `--jobs 4`, y la CI de la PR en verde en Linux, Windows y macOS.
