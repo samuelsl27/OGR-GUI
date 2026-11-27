@@ -11,6 +11,11 @@ English text, and a key with no translation is shown as it is.
 From OGR Slip2D's ``ogr_gui/i18n/__init__.py`` (v0.1.486): **the mechanism
 only** (its last forty lines) and the translations of the texts of this
 package (:mod:`ogr_ui.i18n.es`). Slip2D's 3 488 entries stay in Slip2D.
+Since 0.1.2 (spec 003) the Spanish table also starts with the Spanish of
+the coded messages of OGR Core (:mod:`ogr_ui.i18n.core_es`): their
+templates are the same in every program, so ``ogr_core.messages.render``
+with ``translate=tr`` says them in Spanish with nothing for the program to
+do. Neither module imports the core: they are texts.
 Each program registers its own dictionary at start with
 :func:`add_translations`; a key this package already translates keeps the
 package's translation unless the program says otherwise, which it does
@@ -26,11 +31,16 @@ from __future__ import annotations
 
 from typing import Callable
 
+from .core_es import CORE_ES as _CORE_ES
 from .es import ES as _ES
+
+#: What this package ships in Spanish: the texts of its pieces and the
+#: templates of the core. No key is in both (``test_core_messages_v012``).
+_PACKAGE_ES: dict[str, str] = {**_CORE_ES, **_ES}
 
 _DICTS: dict[str, dict[str, str]] = {
     "en": {},  # English is the reference; keys == values
-    "es": dict(_ES),
+    "es": dict(_PACKAGE_ES),
 }
 
 _LANG = "en"
@@ -90,5 +100,6 @@ def add_translations(lang: str, mapping: dict[str, str]) -> list[str]:
 
 
 def package_translations(lang: str) -> dict[str, str]:
-    """The translations this package ships for ``lang`` (a copy)."""
-    return dict(_ES) if lang == "es" else {}
+    """The translations this package ships for ``lang`` (a copy): in
+    Spanish, its pieces' and the core's messages'."""
+    return dict(_PACKAGE_ES) if lang == "es" else {}

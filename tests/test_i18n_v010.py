@@ -73,6 +73,10 @@ IDENTICAL: dict = {
              "read the same width",
     "Snap": "the name of the status-bar toggle SNAP, kept with it",
     "X: 0.000   Y: 0.000": "a pure format string: the coordinates",
+    # 0.1.2 (spec 003), templates of ogr_core.api
+    "error": "api.error: the same word in Spanish",
+    "pid {pid} ({title})": "api.bridge.listing.item: 'pid', the process "
+                           "identifier, is written so in Spanish too",
 }
 
 
@@ -252,9 +256,12 @@ class TestAProgramsDictionary:
 
     def test_package_translations_is_a_copy(self):
         from ogr_ui.i18n import package_translations, tr
+        from ogr_ui.i18n.core_es import CORE_ES
         from ogr_ui.i18n.es import ES
         table = package_translations("es")
-        assert table == ES and table is not ES
+        # 0.1.2 (spec 003): the pieces' texts and the core's messages
+        assert table == {**CORE_ES, **ES}
+        assert table is not ES and table is not CORE_ES
         table["Cancel"] = "something else"
         with _language("es"):
             assert tr("Cancel") == "Cancelar"

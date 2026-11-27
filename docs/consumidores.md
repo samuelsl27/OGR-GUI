@@ -38,7 +38,7 @@ Lo que en OGR Slip2D estaba atado al programa o al núcleo y aquí se recibe:
 | Leyenda | título por defecto «Factor of safety» | título vacío: lo pone el programa |
 | Modo de los *data tips* | `ogr_gui.data_tips.DataTipMode` | `ogr_ui.data_tip_mode.DataTipMode` (los *data tips* siguen en el programa) |
 | Iconos | solo el catálogo | `register()` para las claves propias; una clave de la suite no se redefine |
-| `tr()` | el diccionario entero del programa | el mecanismo y el español de estas piezas; el programa añade el suyo con `add_translations()`, que devuelve las claves que cambió |
+| `tr()` | el diccionario entero del programa | el mecanismo y el español de estas piezas; desde la 0.1.2, también el de las plantillas de los mensajes con código del núcleo, que el programa ya no lleva; el programa añade el suyo con `add_translations()`, que devuelve las claves que cambió |
 | Reglas 2 y 3 | tests del programa | `ogr_ui.testing.texts` y `ogr_ui.testing.menus`, llamados por los tests del programa |
 
 Lo que el runner del programa añade a su lista blanca de fugas por estas piezas: las mismas
@@ -51,7 +51,7 @@ Matplotlib), con `ogr_ui` en lugar de `ogr_gui`.
 | Cambio | Para quién | Estado |
 |---|---|---|
 | Spec 002: el percentil del ajuste, por campo | OGR FEM2D | Hecha en la 0.1.1; FEM2D la adopta cuando suba su fijación (`CHANGELOG_v0.1.1.md`, sección 4) |
-| Spec 003: el español de los mensajes de `ogr_core.api` | OGR FEM2D | Por especificar |
+| Spec 003: el español de los mensajes del núcleo | OGR FEM2D (y Slip2D al adoptar) | Hecha en la 0.1.2; FEM2D la adopta cuando suba su fijación (`CHANGELOG_v0.1.2.md`, sección 5) |
 | Spec 004: la entrada X,Y con relativos, polares y coma decimal | OGR FEM2D | Por especificar |
 
 ## Cómo pide un programa un cambio
