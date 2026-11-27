@@ -320,14 +320,17 @@ class TestTheXYField:
             assert own[-1] == (-1.25, -2.5)
 
     def test_a_letter_is_refused_and_one_number_gives_nothing(self):
+        """0.1.3 (spec 004), on purpose: a letter can be typed now, and
+        Enter refuses it, keeping the text and saying why (until 0.1.2 the
+        validator kept it out and the field was left empty)."""
         with _window(1366) as (w, bar):
             seen = []
             bar.manual_coords_submitted.connect(
                 lambda x, y: seen.append((x, y)))
             field = bar.coord_input
             _type(field, "x")
-            assert seen == [] and field.text() == ""
-            # past the validator, as a paste would be: still nothing
+            assert seen == [] and field.text() == "x"
+            assert bar.currentMessage() != ""
             field.setText("12.5")
             field._submit()
             field.setText("1, 2, 3")
@@ -339,8 +342,11 @@ class TestTheXYField:
         from ogr_ui.widgets.status_bar import _CoordInput
         _app()
         with _language("es"):
-            key = ("While drawing a boundary, type X,Y and press Enter to "
-                   "add\nthat exact vertex to the in-progress polyline.")
+            # 0.1.3 (spec 004), on purpose: a general help, no longer
+            # Slip2D's ("While drawing a boundary ... polyline", rule 10)
+            key = ("Type a point and press Enter: x, y (or x; y with decimal "
+                   "commas), @dx, dy from the last point, or @distance<angle "
+                   "in degrees.")
             spanish = tr(key)
             assert spanish != key
             field = _CoordInput()

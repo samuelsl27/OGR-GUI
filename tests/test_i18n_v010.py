@@ -54,7 +54,7 @@ EXCEPTIONS: dict = {
         "notation: the coordinates of the pointer",
     ("widgets/status_bar.py", "X: {}   Y: {}"):
         "notation: the coordinates of the pointer",
-    ("widgets/status_bar.py", "x, y"):
+    ("widgets/status_bar.py", "x, y · @dx, dy · @d<a"):
         "notation: the format of the coordinates to type",
 }
 #: How many may be left after the exceptions. Lowering it is the point;

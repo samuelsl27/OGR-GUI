@@ -11,6 +11,8 @@ same in every program. Each program adds its own dictionary with
 from __future__ import annotations
 
 ES: dict[str, str] = {
+    'A relative point needs a first point: give it as x, y.':
+        'Un punto relativo necesita un primer punto: escríbelo como x, y.',
     'Accessible':
         'Accesible',
     'Appearance':
@@ -147,12 +149,16 @@ ES: dict[str, str] = {
         'Tema',
     'Tolerances are in SCREEN PIXELS. The canvas converts them to model units, which is what keeps snapping equally easy at any zoom; a tolerance in metres would get harder to use the further you zoomed out.':
         'Las tolerancias van en PÍXELES DE PANTALLA. El lienzo las convierte a unidades del modelo, que es lo que mantiene el forzado igual de cómodo a cualquier zoom; una tolerancia en metros sería más difícil de usar cuanto más se alejara la vista.',
+    'Type a point and press Enter: x, y (or x; y with decimal commas), @dx, dy from the last point, or @distance<angle in degrees.':
+        'Escribe un punto y pulsa Intro: x, y (o x; y con coma decimal), @dx, dy desde el último punto, o @distancia<ángulo en grados.',
     'Vertex:':
         'Vértice:',
     'Vertical:':
         'Vertical:',
-    'While drawing a boundary, type X,Y and press Enter to add\nthat exact vertex to the in-progress polyline.':
-        'Mientras dibujas un contorno, escribe X,Y y pulsa Intro para añadir\nese vértice exacto a la polilínea en curso.',
+    'Write a point as x, y (or x; y with decimal commas), @dx, dy or @distance<angle.':
+        'Escribe un punto como x, y (o x; y con coma decimal), @dx, dy o @distancia<ángulo.',
+    'Write a polar point as @distance<angle, with the angle in degrees.':
+        'Escribe un punto polar como @distancia<ángulo, con el ángulo en grados.',
     'X: 0.000   Y: 0.000':
         'X: 0.000   Y: 0.000',
 }

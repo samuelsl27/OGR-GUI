@@ -2,8 +2,12 @@
 # Copyright (C) 2026 Samuel Sáez López — Universidad Politécnica de Cartagena
 """
 Custom status bar with SNAP / GRID / ORTHO / OSNAP toggles, live
-coordinate readout, and a manual (X, Y) entry field for typing exact
-vertex positions during a boundary drawing (v0.1.3).
+coordinate readout, and a manual X,Y entry field for typing an exact
+point (Slip2D v0.1.3). Since OGR GUI 0.1.3 (spec 004, asked by OGR FEM2D)
+the entry reads relative and polar points and the decimal comma with
+:mod:`ogr_ui.point_entry`, from the reference point the program gives
+(:meth:`OgrStatusBar.set_point_reference`), and says in the bar why it
+refuses what it cannot read.
 
 Author: Samuel Sáez López (UPCT)
 """
@@ -12,14 +16,16 @@ from __future__ import annotations
 import time
 from typing import Optional
 
-from PySide6.QtCore import Qt, Signal
-from PySide6.QtGui import QDoubleValidator, QMouseEvent, QRegularExpressionValidator
-from PySide6.QtCore import QRegularExpression
+from PySide6.QtCore import QSize, Qt, Signal
+from PySide6.QtGui import QDoubleValidator, QMouseEvent
 from PySide6.QtWidgets import (
     QHBoxLayout,
     QLabel,
     QLineEdit,
+    QSizePolicy,
     QStatusBar,
+    QStyle,
+    QStyleOptionFrame,
     QWidget,
 )
 
@@ -63,39 +69,69 @@ class _ToggleLabel(QLabel):
 
 # ----------------------------------------------------------------------
 class _CoordInput(QLineEdit):
-    """Compact ``x, y`` entry field.
+    """Compact X,Y entry field (OGR GUI 0.1.3, spec 004).
 
-    On Enter, emits :attr:`coords_submitted(x, y)`. Accepts any of:
-        - ``12.5, 3.2``
-        - ``12.5 3.2``
-        - ``12.5;3.2``
+    On Enter it reads its text with :func:`ogr_ui.point_entry.read_point`:
+    an absolute point (``1,5; 2,5``, ``12.5, 3.2``, ``1.5,2.5``), one
+    relative to the reference point the program gives (``@dx, dy``), or a
+    polar one from it (``@distance<angle``, degrees). A point read is
+    emitted by :attr:`coords_submitted` (x, y), always absolute, and the
+    field is emptied. A text that cannot be read stays where it is, for
+    correcting, and :attr:`point_refused` says why, translated. Any
+    character can be typed: nothing is read until Enter.
     """
     coords_submitted = Signal(float, float)
+    point_refused = Signal(str)
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
-        self.setPlaceholderText("x, y")
-        self.setMaximumWidth(130)
-        self.setToolTip(
-            tr("While drawing a boundary, type X,Y and press Enter to add\n"
-            "that exact vertex to the in-progress polyline.")
-        )
-        # Accept a pair of signed floats separated by comma, space, or semicolon
-        rx = QRegularExpression(r"^-?\d+(\.\d+)?\s*[,;\s]\s*-?\d+(\.\d+)?$")
-        self.setValidator(QRegularExpressionValidator(rx, self))
+        self._reference = None
+        # what can be typed: notation, the same in every language
+        self.setPlaceholderText("x, y · @dx, dy · @d<a")
+        # as wide as the whole placeholder in its own font (sizeHint), and
+        # no wider: the messages of the bar keep their room
+        self.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        self.setToolTip(tr(
+            "Type a point and press Enter: x, y (or x; y with decimal "
+            "commas), @dx, dy from the last point, or @distance<angle in "
+            "degrees."))
         self.returnPressed.connect(self._submit)
 
+    def sizeHint(self) -> QSize:  # noqa: N802
+        """Room for the whole placeholder, measured with the font and the
+        style the field has now (they change with the theme)."""
+        opt = QStyleOptionFrame()
+        self.initStyleOption(opt)
+        m = self.textMargins()
+        fm = self.fontMetrics()
+        # 2 px each side: QLineEdit's own horizontal margin
+        inner = QSize(fm.horizontalAdvance(self.placeholderText()) + 4
+                      + m.left() + m.right(), fm.height())
+        return self.style().sizeFromContents(
+            QStyle.CT_LineEdit, opt, inner, self)
+
+    def minimumSizeHint(self) -> QSize:  # noqa: N802
+        return self.sizeHint()
+
+    def set_reference(self, point) -> None:
+        """The point ``@...`` is measured from, in the program's units, or
+        ``None`` for none. One that is not two finite numbers raises
+        ``ValueError`` here, where it is given."""
+        from ogr_ui.point_entry import as_reference
+        self._reference = as_reference(point)
+
+    def reference(self):
+        return self._reference
+
     def _submit(self) -> None:
-        txt = self.text().strip()
-        if not txt:
-            return
-        parts = (txt.replace(";", ",").replace(",", " ")).split()
-        if len(parts) != 2:
+        from ogr_ui.point_entry import PointEntryError, read_point
+        txt = self.text()
+        if not txt.strip():
             return
         try:
-            x = float(parts[0])
-            y = float(parts[1])
-        except ValueError:
+            x, y = read_point(txt, self._reference)
+        except PointEntryError as exc:
+            self.point_refused.emit(tr(str(exc)))
             return
         self.coords_submitted.emit(x, y)
         self.clear()
@@ -213,6 +249,7 @@ class OgrStatusBar(ElidingStatusBar):
         # Manual coord input
         self.coord_input = _CoordInput(self)
         self.coord_input.coords_submitted.connect(self.manual_coords_submitted.emit)
+        self.coord_input.point_refused.connect(self.showMessage)
 
         # Toggle indicators
         self.snap = _ToggleLabel(tr("SNAP"), True)
@@ -238,6 +275,13 @@ class OgrStatusBar(ElidingStatusBar):
         self.retheme()
 
     # ------------------------------------------------------------------
+    def set_point_reference(self, point) -> None:
+        """The point a typed ``@dx, dy`` or ``@distance<angle`` is measured
+        from (the last vertex, say), in the units the program shows; ``None``
+        when there is none, and then a relative point is refused with its
+        reason (spec 004)."""
+        self.coord_input.set_reference(point)
+
     def retheme(self) -> None:
         """Colour the readout and the separator for the active theme, and
         the toggles that are off (v0.1.316, D301: #4a4a4a on the dark bar
