@@ -12,7 +12,7 @@ más que para su runner de tests, que entra por el extra `[test]`.
 
 | Programa | Repositorio | `ogr-gui` que fija | Desde | Suite entera |
 |---|---|---|---|---|
-| OGR FEM2D | `samuelsl27/OGR-FEM2D` | — (lo pidió; lo fija en su spec 006, T19) | — | `python tests/_runner.py` |
+| OGR FEM2D | `samuelsl27/OGR-FEM2D` | `v0.1.0` | 2026-11-24 (su spec 006, T19, `c49831d`) | `python tests/_runner.py` |
 
 - **La verdad es el `pyproject.toml` de cada programa**
   (`ogr-gui @ git+https://github.com/samuelsl27/OGR-GUI@vX.Y.Z`). Esta tabla la repite para que se
@@ -50,7 +50,7 @@ Matplotlib), con `ogr_ui` en lugar de `ogr_gui`.
 
 | Cambio | Para quién | Estado |
 |---|---|---|
-| Spec 002: el percentil del ajuste, por campo | OGR FEM2D | Hecha en la rama `dev/002-percentil-del-ajuste`; sale en la 0.1.1, sin etiquetar (changelog en `docs/changelog/PENDIENTE_v0.1.1.md`) |
+| Spec 002: el percentil del ajuste, por campo | OGR FEM2D | Hecha en la 0.1.1; FEM2D la adopta cuando suba su fijación (`CHANGELOG_v0.1.1.md`, sección 4) |
 | Spec 003: el español de los mensajes de `ogr_core.api` | OGR FEM2D | Por especificar |
 | Spec 004: la entrada X,Y con relativos, polares y coma decimal | OGR FEM2D | Por especificar |
 

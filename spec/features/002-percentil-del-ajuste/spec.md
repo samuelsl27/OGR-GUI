@@ -1,6 +1,6 @@
 # Spec 002 — El percentil del ajuste, por campo
 
-> Estado: aprobada (2026-11-25)
+> Estado: hecha (2026-11-27, v0.1.1)
 
 ## Contexto y objetivo
 

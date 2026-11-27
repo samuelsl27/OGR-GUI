@@ -1,8 +1,4 @@
-# OGR GUI 0.1.1 — sin etiquetar
-
-> Borrador del changelog de la 0.1.1. Se renombra a `CHANGELOG_v0.1.1.md` en el commit que pone la
-> versión en `0.1.1` y se etiqueta: `tests/test_version_v010.py` pide que, mientras la versión sea
-> `0.1.1.dev0`, ningún changelog sea de la 0.1.1 o posterior.
+# OGR GUI 0.1.1 — 2026-11-27
 
 Un cambio compatible, la [spec 002](../../spec/features/002-percentil-del-ajuste/spec.md), que pidió
 OGR FEM2D el 2026-11-24: el percentil del ajuste del rango de un contorno, por campo.
@@ -41,7 +37,13 @@ el pico que pidió FEM2D: cien valores entre 1 y 2 y un 50 dan 1,98 con 0,98 y 5
 ajustes del diálogo con dos campos y lo que devuelve al aceptar (regla 7); la ida y vuelta entre
 campos; los rangos y la ayuda de la 0.1.0 para un programa sin percentiles; la ayuda en inglés y en
 español; y el diálogo en español en 1366×728 con cada campo. `test_contours_v010.py`, sin tocar, en
-verde. 447 casos en 24 archivos, en verde en Windows, con `--jobs 4`, sin fugas.
+verde. 447 casos en 24 archivos, en verde en Windows, en serie y con `--jobs 4`, sin fugas; la CI
+de la PR #1, en verde en Linux, Windows y macOS.
+
+La suite entera de OGR FEM2D (que fija la 0.1.0) contra este árbol, con el árbol por delante en el
+`PYTHONPATH`: 779 casos, 778 en verde. El que falla es el suyo que compara el `ogr_ui` instalado con
+la etiqueta que fija (`test_the_installed_one`: `0.1.1.dev0` contra `v0.1.0`): falla por correr
+contra otro árbol, como tiene que fallar, y deja de fallar cuando FEM2D suba su fijación.
 
 ## 4. Qué tiene que hacer un programa
 

@@ -33,7 +33,7 @@ suite entera en verde. Una tarea cada vez.
   - Nota: el changelog va en `docs/changelog/PENDIENTE_v0.1.1.md` y se renombra a
     `CHANGELOG_v0.1.1.md` al etiquetar: `test_version_v010` no admite el changelog de la 0.1.1
     mientras la versión sea `0.1.1.dev0`.
-- [ ] **T5** Validación final — RF-1–RF-10
+- [x] **T5** Validación final — RF-1–RF-10
   - Hecho cuando: cada RF tiene su test en verde en la tabla «Validación» de la spec, la lista de
     diseño de la spec está marcada, la suite entera pasa sin filtrar y sin fugas en serie y con
     `--jobs 4`, la CI de la PR en verde en Linux, Windows y macOS, y la spec en «hecha». La
