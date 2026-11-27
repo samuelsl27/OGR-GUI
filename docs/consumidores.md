@@ -84,6 +84,15 @@ escribirlos al adoptarlo. Se anotan al recibirlos; se tachan cuando Slip2D fije 
   punto del aviso, 24 intervalos al tocar la casilla del rango automático, **no se reprodujo**:
   esa línea es del botón «0 a 6», que en una corrida sísmica pasa a deshabilitarse; la lectura de
   esta sesión estaba equivocada.
+- **Slip2D 0.1.503 (`fa73de8`, D442), el conmutador *Critical Probabilistic Surface* de
+  Interpretar.** Su changelog dejaba la gemela aquí «sin comprobar»; comprobado el 2026-11-27,
+  **no la hay**. Lo que toca es de Slip2D: `interpret_window.py`, `canvas/canvas_view.py`
+  (`PROBABILISTIC_SURFACE_COLOUR`, `#f77f00`), `probabilistic.py` (`user_defined`) y dos textos
+  de su `i18n`. En `ogr_ui` no hay ventana de Interpretar ni lienzo, ninguna clave de
+  `ROLE_COLORS` es un color de superficie, y los dos textos no son del núcleo, así que no van a
+  `core_es.py`. Lo único compartido que usa el camino es `disabled_reasons.gate`, idéntica en los
+  dos repositorios y sin cambios: desmarcar una entrada que se queda gris lo hace Slip2D por su
+  cuenta (`refresh_statistics_gates`), no `gate`.
 - **Slip2D 0.1.497–0.1.501, `i18n`.** Las entradas nuevas son de catálogos del motor de Slip2D
   (`method.newmark_record_missing`, `method.seismic_static_unstable*`, `stat.sens_no_range`), dos
   *tooltips* del lienzo y la nota de la página Seismic. Ninguna es de `ogr_core`, así que nada va
