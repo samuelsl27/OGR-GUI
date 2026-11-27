@@ -1,6 +1,6 @@
 # Spec 004 — La entrada X,Y con relativos, polares y coma decimal
 
-> Estado: aprobada (2026-11-27)
+> Estado: aprobada (2026-11-27); validada el 2026-11-27, por fusionar y etiquetar (v0.1.3)
 
 ## Contexto y objetivo
 
@@ -112,20 +112,20 @@ Compatibilidad:
 Lista de comprobación (se marca al validar):
 
 **Toda pieza**
-- [ ] No importa el núcleo ni ningún programa; el punto de referencia llega del programa.
-- [ ] Sus textos pasan por `tr()` y tienen su español en `i18n/es.py`; el texto guía, como
+- [x] No importa el núcleo ni ningún programa; el punto de referencia llega del programa.
+- [x] Sus textos pasan por `tr()` y tienen su español en `i18n/es.py`; el texto guía, como
       notación, en la lista de excepciones con su porqué.
-- [ ] Probada sin pantalla, sin `exec()` y sin dejar estado (regla 5).
+- [x] Probada sin pantalla, sin `exec()` y sin dejar estado (regla 5).
 
 **Entrada**
-- [ ] Acepta lo no ambiguo y rechaza lo ambiguo con un mensaje que dice qué falta (D-7).
-- [ ] El texto guía se lee entero, en los dos idiomas y en los dos temas.
+- [x] Acepta lo no ambiguo y rechaza lo ambiguo con un mensaje que dice qué falta (D-7).
+- [x] El texto guía se lee entero, en los dos idiomas y en los dos temas.
 
 **Texto**
-- [ ] Corto, en presente, sin claves internas ni signos de exclamación.
+- [x] Corto, en presente, sin claves internas ni signos de exclamación.
 
 **Y siempre**
-- [ ] Ninguno de los patrones de «Lo que no se hace».
+- [x] Ninguno de los patrones de «Lo que no se hace».
 
 No aplica: colores, iconos, diálogos, acciones de menú, proceso largo.
 
@@ -181,3 +181,43 @@ motivo (RF-8).
 ## Dudas abiertas
 
 - Ninguna.
+
+## Validación
+
+2026-11-27, en la rama `dev/004-entrada-xy`, commit `bdf7add`. Suite entera sin filtrar: **497 casos,
+497 en verde, sin fugas**, en serie y con `--jobs 4` (Windows). Los tests son de
+`tests/test_point_entry_v013.py` salvo donde se dice.
+
+| RF | Test que lo cubre | Resultado |
+|---|---|---|
+| RF-1 | `TestAnAbsolutePoint.test_every_separator`, `test_one_comma_with_no_space_separates`; `TestTheEntryHandsOverAnAbsolutePoint.test_each_form_by_the_keyboard` | verde |
+| RF-2 | `TestAnAbsolutePoint.test_the_numbers` | verde |
+| RF-3 | `TestARelativePoint.test_by_a_shift` | verde |
+| RF-4 | `TestARelativePoint.test_polar_identities` y `test_polar_forms` (identidades escritas a mano, regla 1) | verde |
+| RF-5 | `TestTheEntryHandsOverAnAbsolutePoint.test_the_reference_given_changed_and_taken_away` y `test_a_reference_that_is_not_a_point_is_refused_where_it_is_given`; `TestWhatIsRefused.test_a_reference_that_is_not_a_point` | verde |
+| RF-6 | `TestAnAbsolutePoint.test_spaces_around`; `TestARelativePoint.test_by_a_shift` y `test_polar_forms` | verde |
+| RF-7 | `TestWhatIsRefused.test_what_is_ambiguous_or_not_a_point`, `test_a_polar_point_written_wrong`; `TestARefusalSaysWhyAndKeepsTheText.test_in_english_and_in_spanish` | verde |
+| RF-8 | `TestWhatIsRefused.test_a_relative_point_with_no_reference`; `TestARefusalSaysWhyAndKeepsTheText.test_in_english_and_in_spanish` | verde |
+| RF-9 | `TestWhatIsRefused.test_what_is_not_finite` | verde |
+| RF-10 | `TestARefusalSaysWhyAndKeepsTheText` (sus tres casos); `tests/test_status_bar_v010.py::test_a_letter_is_refused_and_one_number_gives_nothing`, cambiado a propósito | verde |
+| RF-11 | `TestTheEntryHandsOverAnAbsolutePoint.test_each_form_by_the_keyboard` | verde |
+| RF-12 | `TestTheEntryHandsOverAnAbsolutePoint.test_an_empty_entry_does_nothing` | verde |
+| RF-13 | `TestWhatTheEntryShows.test_a_general_help_in_both_languages` y `test_a_program_gives_its_own`; `tests/test_status_bar_v010.py::test_its_texts_are_translated` | verde |
+| RF-14 | `TestWhatTheEntryShows.test_the_whole_placeholder_in_both_themes` y `test_the_messages_keep_their_room_at_1366` | verde |
+| RF-15 | `TestTheEntryHandsOverAnAbsolutePoint.test_every_character_can_be_typed` | verde |
+| RF-16 | `TestAnAbsolutePoint.test_what_010_took_gives_the_same_point`; `TestTheEntryHandsOverAnAbsolutePoint.test_the_old_signal_of_the_entry_too`; `tests/test_status_bar_v010.py::test_every_separator_gives_the_same_point_to_the_bit`, sin tocar | verde |
+
+Lista de diseño: marcada arriba, mirando la pieza. Capturas sin pantalla
+(`QT_QPA_FONTDIR=C:/Windows/Fonts`) de la barra a 1366 px, en inglés y en español y en los dos temas:
+el texto guía se lee entero con la entrada vacía (90 px); con `1,5,2,5` e Intro, el texto se queda
+en la entrada y la barra dice «Write a point as x, y (…)» / «Escribe un punto como x, y (…)», con
+734 px o más para los mensajes. Ningún principio falla.
+
+CI de la [PR #3](https://github.com/samuelsl27/OGR-GUI/pull/3), commit `bdf7add`: en verde en Linux y
+Windows (Python 3.11, 3.12 y 3.13) y en macOS (3.12), y la licencia.
+
+La suite entera de OGR FEM2D contra este árbol (con `--jobs 4`): 829 casos, 827 en verde. Falla
+`test_the_installed_one`, como tiene que fallar contra otro árbol. El otro,
+`test_gui_bridge_v0015.py::TestTheDoor::test_a_wrong_token_and_turning_it_off` (con una fuga de un
+archivo del puente), pasa solo, con este árbol y sin él: es del puente de FEM2D bajo carga, no de la
+entrada. Su rodeo de la entrada sigue funcionando sin cambios.

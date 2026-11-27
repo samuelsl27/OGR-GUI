@@ -27,7 +27,7 @@ suite entera en verde. Una tarea cada vez.
   `docs/changelog/PENDIENTE_v0.1.3.md` (qué se encontró, los dos tests que cambiaron, y qué puede
   quitar FEM2D), `docs/consumidores.md` y `roadmap.md` — RF-1–RF-16
   - Hecho cuando: los archivos dicen lo mismo que el plan, y la suite entera en verde.
-- [ ] **T5** Validación final — RF-1–RF-16
+- [x] **T5** Validación final — RF-1–RF-16
   - Hecho cuando: cada RF tiene su test en verde en la tabla «Validación» de la spec, la lista de
     diseño está marcada con capturas en inglés y español y en los dos temas, la suite entera pasa
     sin filtrar y sin fugas en serie y con `--jobs 4`, la suite de FEM2D contra este árbol, y la CI

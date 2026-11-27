@@ -18,7 +18,7 @@ Del escrito de OGR FEM2D del 2026-11-24 y 25 (tres specs, decisión de la propie
 
 | Spec | Versión prevista | Qué | Estado |
 |---|---|---|---|
-| [004 — La entrada X,Y con relativos, polares y coma decimal](../features/004-entrada-xy/spec.md) | 0.1.3 | `@dx, dy`, `@d<a`, la coma decimal y el rechazo de lo ambiguo en la barra de estado | Implementada en la rama `dev/004-entrada-xy`; por validar en la CI |
+| [004 — La entrada X,Y con relativos, polares y coma decimal](../features/004-entrada-xy/spec.md) | 0.1.3 | `@dx, dy`, `@d<a`, la coma decimal y el rechazo de lo ambiguo en la barra de estado | Validada (2026-11-27, PR #3); por fusionar y etiquetar |
 
 ## Pendiente de decidir
 

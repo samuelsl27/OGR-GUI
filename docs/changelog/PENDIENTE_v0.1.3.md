@@ -52,6 +52,11 @@ y dice por qué rechaza lo que no puede leer.
 
 `test_i18n_v010.py`: `EXCEPTIONS` tiene el texto guía nuevo, como notación.
 
+497 casos, en verde en Windows, en serie y con `--jobs 4`, sin fugas; la CI de la PR #3, en verde
+en Linux, Windows y macOS. La suite de OGR FEM2D contra este árbol: 829 casos, 827 en verde; fallan
+`test_the_installed_one` (como tiene que fallar contra otro árbol) y un test de su puente que pasa
+solo, con este árbol y sin él.
+
 ## 4. Qué tiene que hacer un programa
 
 Nada, si no escribe relativos: lo que la 0.1.0 aceptaba da el mismo punto por la misma señal.
