@@ -1,4 +1,4 @@
-# OGR GUI 0.1.2 — (sin fecha: se pone al etiquetar)
+# OGR GUI 0.1.2 — 2026-11-27
 
 Un cambio compatible, la [spec 003](../../spec/features/003-espanol-del-nucleo/spec.md), que pidió
 OGR FEM2D el 2026-11-25 para los mensajes de `ogr_core.api` y que la propietaria extendió a todos

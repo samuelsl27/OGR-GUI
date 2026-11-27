@@ -1,6 +1,6 @@
 # Spec 003 — El español de los mensajes del núcleo
 
-> Estado: aprobada (2026-11-27); validada el 2026-11-27, por fusionar y etiquetar (v0.1.2)
+> Estado: hecha (2026-11-27, v0.1.2)
 
 ## Contexto y objetivo
 

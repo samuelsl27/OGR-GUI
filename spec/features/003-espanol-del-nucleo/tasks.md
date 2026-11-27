@@ -34,7 +34,8 @@ suite entera en verde. Una tarea cada vez.
   nuevas para que la propietaria las lea, las de RF-8 con la de Slip2D al lado, y qué tiene o puede
   hacer cada programa), `docs/consumidores.md` y `roadmap.md` — RF-1–RF-9
   - Hecho cuando: los tres archivos dicen lo mismo que el plan, y la suite entera en verde.
-  - Nota: la versión pasa a `0.1.2.dev0` en esta rama (la 0.1.1 está en `main`).
+  - Nota: la versión pasa a `0.1.2.dev0` en esta rama (la 0.1.1 está en `main`). El changelog va
+    en `PENDIENTE_v0.1.2.md` y se renombra a `CHANGELOG_v0.1.2.md` en el commit de la versión.
 - [x] **T6** Validación final — RF-1–RF-9
   - Hecho cuando: cada RF tiene su test en verde en la tabla «Validación» de la spec, la lista de
     diseño de la spec está marcada, la suite entera pasa sin filtrar y sin fugas en serie y con
