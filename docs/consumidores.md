@@ -12,7 +12,7 @@ más que para su runner de tests, que entra por el extra `[test]`.
 
 | Programa | Repositorio | `ogr-gui` que fija | Desde | Suite entera |
 |---|---|---|---|---|
-| OGR FEM2D | `samuelsl27/OGR-FEM2D` | — (lo pidió; lo fija en su spec 006, T19) | — | `python tests/_runner.py` |
+| OGR FEM2D | `samuelsl27/OGR-FEM2D` | `v0.1.0` | 2026-11-24 (su spec 006, T19, `c49831d`) | `python tests/_runner.py` |
 
 - **La verdad es el `pyproject.toml` de cada programa**
   (`ogr-gui @ git+https://github.com/samuelsl27/OGR-GUI@vX.Y.Z`). Esta tabla la repite para que se
@@ -34,7 +34,7 @@ Lo que en OGR Slip2D estaba atado al programa o al núcleo y aquí se recibe:
 | Tareas | el progreso y las fases de `ogr_core.progress` | `install_progress(watching, phase, phase_texts)` una vez, al arrancar |
 | Diálogo de progreso | `ogr_gui/dialogs/misc_dialogs.py`, con la fase `OPTIMIZE` | `ogr_ui.dialogs.progress_dialog`, con los textos de fase del programa |
 | Preferencias | funciones de módulo con `"OGR Slip2D"` dentro | `Preferences("Nombre del programa", "nombre-de-archivo")` |
-| Contornos | `SCALAR_FIELDS`, `available_fields`, `ContourSettings.for_field` (el 0–6 del factor de seguridad) | `ContourField` y `RangePreset`, que da el programa al diálogo |
+| Contornos | `SCALAR_FIELDS`, `available_fields`, `ContourSettings.for_field` (el 0–6 del factor de seguridad) | `ContourField` y `RangePreset`, que da el programa al diálogo; desde la 0.1.1, `ContourField.fit_percentile` (0,98 por defecto; 1 para el rango entero), que el programa pasa también a `fit_to` cuando ajusta el rango al dibujar |
 | Leyenda | título por defecto «Factor of safety» | título vacío: lo pone el programa |
 | Modo de los *data tips* | `ogr_gui.data_tips.DataTipMode` | `ogr_ui.data_tip_mode.DataTipMode` (los *data tips* siguen en el programa) |
 | Iconos | solo el catálogo | `register()` para las claves propias; una clave de la suite no se redefine |
@@ -50,7 +50,9 @@ Matplotlib), con `ogr_ui` en lugar de `ogr_gui`.
 
 | Cambio | Para quién | Estado |
 |---|---|---|
-| — | — | — |
+| Spec 002: el percentil del ajuste, por campo | OGR FEM2D | Hecha en la 0.1.1; FEM2D la adopta cuando suba su fijación (`CHANGELOG_v0.1.1.md`, sección 4) |
+| Spec 003: el español de los mensajes de `ogr_core.api` | OGR FEM2D | Por especificar |
+| Spec 004: la entrada X,Y con relativos, polares y coma decimal | OGR FEM2D | Por especificar |
 
 ## Cómo pide un programa un cambio
 

@@ -8,6 +8,17 @@
 | Spec | Versión | Qué |
 |---|---|---|
 | [001 — Paquete inicial](../features/001-paquete-inicial/spec.md) | 0.1.0 (2026-11-24) | Las piezas de OGR Slip2D v0.1.486 que pidió OGR FEM2D, y las comprobaciones de las reglas 2 y 3 |
+| [002 — El percentil del ajuste, por campo](../features/002-percentil-del-ajuste/spec.md) | 0.1.1 (2026-11-27) | Cada `ContourField` dice el percentil de su ajuste (FEM2D: el rango entero); D-12 enmendado |
+
+## En curso
+
+Del escrito de OGR FEM2D del 2026-11-24 y 25 (tres specs, decisión de la propietaria del
+2026-11-25).
+
+| Spec | Versión prevista | Qué | Estado |
+|---|---|---|---|
+| 003 — El español de los mensajes de `ogr_core.api` | — | Las 72 plantillas de `API_MESSAGES`, en un sitio para todos los programas | Por especificar |
+| 004 — La entrada X,Y con relativos, polares y coma decimal | — | `@dx, dy`, `@d<a`, la coma decimal y el rechazo de lo ambiguo en la barra de estado | Por especificar |
 
 ## Pendiente de decidir
 

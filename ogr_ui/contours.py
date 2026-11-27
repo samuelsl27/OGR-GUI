@@ -18,9 +18,12 @@ Design points:
 * **The range is separate from the palette.** Clamping outside values to
   the end colours (rather than leaving them uncoloured) means a user who
   narrows the range to inspect a detail still sees the whole model.
-* **Auto-ranging ignores outliers.** A single surface with a factor of
+* **Auto-ranging is the field's.** A single surface with a factor of
   safety of 40 would otherwise squash every meaningful value into one
-  band, so the automatic range uses a percentile.
+  band, so by default the automatic maximum is the 98th percentile. A
+  field whose extreme IS the point (the peak stress at a tunnel wall)
+  says so with ``ContourField.fit_percentile = 1``: the whole range
+  (OGR GUI 0.1.1, spec 002).
 
 **OGR GUI 0.1.0.** In OGR Slip2D this module also listed the fields a
 limit-equilibrium result can contour (``SCALAR_FIELDS``,
@@ -276,11 +279,29 @@ class ContourField:
     ``label`` is English and is shown through ``tr()``: the program adds
     its translation. ``start`` is the settings the field starts from and
     goes back to with *Restore Defaults*; None is
-    :meth:`ContourSettings.automatic`."""
+    :meth:`ContourSettings.automatic`.
+
+    ``fit_percentile`` (OGR GUI 0.1.1, spec 002) is the share of the
+    values the automatic maximum covers, in (0, 1]: 0.98 leaves a single
+    extreme value out, 1 is the whole range. The dialog fits with it; a
+    program that fits the range itself when it draws passes the same one
+    to :meth:`ContourSettings.fit_to`, or the drawing and the dialog
+    disagree. A wrong one is refused here, where it is declared, not when
+    the dialog opens."""
 
     key: str
     label: str
     start: "ContourSettings | None" = None
+    fit_percentile: float = 0.98
+
+    def __post_init__(self) -> None:
+        p = self.fit_percentile
+        ok = (isinstance(p, (int, float)) and not isinstance(p, bool)
+              and math.isfinite(p) and 0 < p <= 1)
+        if not ok:
+            raise ValueError(
+                f"the fit percentile of the field {self.key!r} must be a "
+                f"number in (0, 1], not {p!r}")
 
     def defaults(self) -> ContourSettings:
         if self.start is None:

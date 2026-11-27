@@ -22,6 +22,10 @@ Two choices worth stating:
 * **The range follows the scalar.** Switching field resets the bounds to
   that field's defaults, because a 0–6 range means everything for a
   factor of safety and nothing for a total head in metres.
+* **So does the fit** (OGR GUI 0.1.1, spec 002). The three fits -- the
+  checkbox, *Fit to results* and *Restore Defaults* -- use the selected
+  field's ``fit_percentile``, and the checkbox's help says whether that
+  field trims the extreme values or keeps the whole range.
 
 **OGR GUI 0.1.0.** The fields came from Slip2D's ``SCALAR_FIELDS`` and
 the one-click range was its factor-of-safety «0 to 6»; both are now the
@@ -131,10 +135,6 @@ class ContourOptionsDialog(QDialog):
         fr = QFormLayout(gb_r)
         self.chk_auto = QCheckBox(tr("Automatic range from the results"))
         self.chk_auto.setChecked(self.settings.auto_range)
-        self.chk_auto.setToolTip(tr(
-            "Left on, the range follows the data as results change. The "
-            "upper bound uses a percentile so a single extreme value "
-            "cannot squash everything else into one band."))
         self.chk_auto.toggled.connect(self._on_auto_toggled)
         fr.addRow("", self.chk_auto)
         self.sp_min = QDoubleSpinBox()
@@ -229,6 +229,7 @@ class ContourOptionsDialog(QDialog):
             self._defaults)
         v.addWidget(bb)
 
+        self._auto_help()
         self._on_auto_toggled(self.chk_auto.isChecked())
         self._refresh()
 
@@ -244,7 +245,7 @@ class ContourOptionsDialog(QDialog):
         self.btn_fit.setEnabled(self._fittable())
         if on and self._fittable():
             probe = ContourSettings.from_dict(self.settings.to_dict())
-            probe.fit_to(self._values)
+            probe.fit_to(self._values, percentile=self._fit_percentile())
             self.sp_min.blockSignals(True)
             self.sp_max.blockSignals(True)
             self.sp_min.setValue(probe.vmin)
@@ -275,12 +276,38 @@ class ContourOptionsDialog(QDialog):
         self.lbl_step.setText(s.format_value(step))
 
     def _on_field_changed(self, *_a) -> None:
-        """A different scalar needs a different range, not the last one."""
+        """A different scalar needs a different range, not the last one,
+        and the help of the checkbox says what the new one's fit does."""
+        self._auto_help()
         self._defaults()
+
+    def _auto_help(self) -> None:
+        """The help of the automatic-range checkbox, for the selected
+        field (OGR GUI 0.1.1, spec 002): a field that keeps the whole range
+        does not trim, and saying it does would be false."""
+        if self._fit_percentile() >= 1:
+            text = tr("Left on, the range follows the data as results "
+                      "change, from the smallest value to the largest.")
+        else:
+            text = tr("Left on, the range follows the data as results "
+                      "change. The upper bound uses a percentile so a "
+                      "single extreme value cannot squash everything else "
+                      "into one band.")
+        self.chk_auto.setToolTip(text)
 
     def _field_key(self) -> str:
         key = self.cbo_field.currentData()
         return key if key is not None else ""
+
+    def _field(self) -> ContourField:
+        """The selected field as the program declared it."""
+        key = self._field_key()
+        return self._fields.get(key) or ContourField(key, key)
+
+    def _fit_percentile(self) -> float:
+        """The share of the values the selected field's fit covers
+        (OGR GUI 0.1.1, spec 002): 0.98 unless the program says so."""
+        return self._field().fit_percentile
 
     def _range_preset(self, preset) -> None:
         self.chk_auto.setChecked(False)
@@ -293,18 +320,17 @@ class ContourOptionsDialog(QDialog):
         if not self._fittable():
             return
         probe = self._collect()
-        probe.fit_to(self._values)
+        probe.fit_to(self._values, percentile=self._fit_percentile())
         self.chk_auto.setChecked(False)
         self.sp_min.setValue(probe.vmin)
         self.sp_max.setValue(probe.vmax)
         self._refresh()
 
     def _defaults(self) -> None:
-        key = self._field_key()
-        field = self._fields.get(key) or ContourField(key, key)
+        field = self._field()
         fresh = field.defaults()
         if fresh.auto_range and self._fittable():
-            fresh.fit_to(self._values)
+            fresh.fit_to(self._values, percentile=field.fit_percentile)
         self.sp_min.setValue(fresh.vmin)
         self.sp_max.setValue(fresh.vmax)
         self.sp_int.setValue(fresh.intervals)
