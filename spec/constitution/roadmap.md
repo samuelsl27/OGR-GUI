@@ -17,7 +17,7 @@ Del escrito de OGR FEM2D del 2026-11-24 y 25 (tres specs, decisión de la propie
 
 | Spec | Versión prevista | Qué | Estado |
 |---|---|---|---|
-| 003 — El español de los mensajes de `ogr_core.api` | — | Las 72 plantillas de `API_MESSAGES`, en un sitio para todos los programas | Por especificar |
+| [003 — El español de los mensajes del núcleo](../features/003-espanol-del-nucleo/spec.md) | 0.1.2 | El español de las plantillas de todos los catálogos con código de `ogr_core` (v0.2.12), en un sitio para todos los programas | Implementada en la rama `dev/003-espanol-del-nucleo`; por validar en la CI |
 | 004 — La entrada X,Y con relativos, polares y coma decimal | — | `@dx, dy`, `@d<a`, la coma decimal y el rechazo de lo ambiguo en la barra de estado | Por especificar |
 
 ## Pendiente de decidir
