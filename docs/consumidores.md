@@ -71,14 +71,19 @@ escribirlos al adoptarlo. Se anotan al recibirlos; se tachan cuando Slip2D fije 
     alto, y el extremo no se recorta;
   - factor: el `ContourField` del factor de siempre (0–6 en 24 bandas).
 
-  Al adoptarlo, dos cosas que en Slip2D 0.1.500 no cuadran (leídas en su código, no corridas; se
-  le dan escritas a su sesión): su diálogo de contornos ajusta siempre al 0,98 (al marcar el rango
-  automático, en *Fit* y en *Restore Defaults*, `contour_options_dialog.py` 234, 279, 289),
-  mientras el dibujo de una corrida Newmark ajusta al 1,0 (`interpret_window.py` 1037); y
-  *Restore Defaults* vuelve a `for_field("fos")`, el 0–6, no a `for_reported`. Con `ogr_ui` las
-  dos desaparecen solas si el `ContourField` que se da al diálogo es el de la magnitud de la
-  corrida. La marca de la leyenda (`ColourScaleLegend.configure(mark=...)`) no cambia: recibe el
-  Ky o el desplazamiento de la crítica en lugar del factor.
+  La marca de la leyenda (`ColourScaleLegend.configure(mark=...)`) no cambia: recibe el Ky o el
+  desplazamiento de la crítica en lugar del factor.
+- **Slip2D 0.1.502 (`344d9ce`), `ContourSettings.fit_percentile_for(caption)`.** Arregla en Slip2D
+  lo que esta sesión le avisó de su diálogo de contornos en la 0.1.500, confirmado allí en vivo
+  (Newmark de su D437 en la 0.1.501: la ventana dibujaba 0–31,083 cm y el diálogo proponía
+  0–17,862 al abrir, en la casilla y en *Fit*; *Restore Defaults* daba el 0–6 en 24 bandas, también
+  con Ky). Ahora el diálogo recibe la magnitud de la corrida y usa su escala (`for_reported`) y su
+  percentil (1,0 para Newmark, 0,98 para el resto) en los cuatro caminos; la ventana usa la misma
+  regla. No pide nada aquí: en `ogr_ui` es el `fit_percentile` y el `start` del `ContourField` de
+  cada magnitud (spec 002, 0.1.1), y `fit_percentile_for` desaparece al adoptarlo. El tercer
+  punto del aviso, 24 intervalos al tocar la casilla del rango automático, **no se reprodujo**:
+  esa línea es del botón «0 a 6», que en una corrida sísmica pasa a deshabilitarse; la lectura de
+  esta sesión estaba equivocada.
 - **Slip2D 0.1.497–0.1.501, `i18n`.** Las entradas nuevas son de catálogos del motor de Slip2D
   (`method.newmark_record_missing`, `method.seismic_static_unstable*`, `stat.sens_no_range`), dos
   *tooltips* del lienzo y la nota de la página Seismic. Ninguna es de `ogr_core`, así que nada va
