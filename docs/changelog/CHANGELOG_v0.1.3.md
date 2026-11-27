@@ -1,4 +1,4 @@
-# OGR GUI 0.1.3 — (sin fecha: se pone al etiquetar)
+# OGR GUI 0.1.3 — 2026-11-27
 
 Un cambio compatible, la [spec 004](../../spec/features/004-entrada-xy/spec.md), que pidió OGR
 FEM2D el 2026-11-25: la entrada X,Y de la barra de estado lee relativos, polares y la coma decimal,

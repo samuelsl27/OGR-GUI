@@ -10,15 +10,11 @@
 | [001 — Paquete inicial](../features/001-paquete-inicial/spec.md) | 0.1.0 (2026-11-24) | Las piezas de OGR Slip2D v0.1.486 que pidió OGR FEM2D, y las comprobaciones de las reglas 2 y 3 |
 | [002 — El percentil del ajuste, por campo](../features/002-percentil-del-ajuste/spec.md) | 0.1.1 (2026-11-27) | Cada `ContourField` dice el percentil de su ajuste (FEM2D: el rango entero); D-12 enmendado |
 | [003 — El español de los mensajes del núcleo](../features/003-espanol-del-nucleo/spec.md) | 0.1.2 (2026-11-27) | El español de las plantillas de los 20 catálogos con código de `ogr_core` v0.2.12, en `ogr_ui/i18n/core_es.py`; `tr()` lo tiene sin que el programa haga nada |
+| [004 — La entrada X,Y con relativos, polares y coma decimal](../features/004-entrada-xy/spec.md) | 0.1.3 (2026-11-27) | La entrada X,Y lee `x; y` con coma decimal, `@dx, dy` y `@d<a` desde el punto que da el programa, y dice por qué rechaza lo que no puede leer (`ogr_ui/point_entry.py`) |
 
 ## En curso
 
-Del escrito de OGR FEM2D del 2026-11-24 y 25 (tres specs, decisión de la propietaria del
-2026-11-25).
-
-| Spec | Versión prevista | Qué | Estado |
-|---|---|---|---|
-| [004 — La entrada X,Y con relativos, polares y coma decimal](../features/004-entrada-xy/spec.md) | 0.1.3 | `@dx, dy`, `@d<a`, la coma decimal y el rechazo de lo ambiguo en la barra de estado | Validada (2026-11-27, PR #3); por fusionar y etiquetar |
+Nada. Las tres specs del escrito de OGR FEM2D del 2026-11-24 y 25 (002, 003 y 004) están hechas.
 
 ## Pendiente de decidir
 

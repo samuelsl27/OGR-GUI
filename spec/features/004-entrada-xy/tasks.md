@@ -24,7 +24,7 @@ suite entera en verde. Una tarea cada vez.
   - Hecho cuando: esas clases, `test_i18n_v010` y `test_text_census_v010` en verde, y la suite
     entera en verde.
 - [x] **T4** Documentación de la versión: la versión a `0.1.3.dev0`,
-  `docs/changelog/PENDIENTE_v0.1.3.md` (qué se encontró, los dos tests que cambiaron, y qué puede
+  `docs/changelog/PENDIENTE_v0.1.3.md`, renombrado a `CHANGELOG_v0.1.3.md` en el commit de la versión (qué se encontró, los dos tests que cambiaron, y qué puede
   quitar FEM2D), `docs/consumidores.md` y `roadmap.md` — RF-1–RF-16
   - Hecho cuando: los archivos dicen lo mismo que el plan, y la suite entera en verde.
 - [x] **T5** Validación final — RF-1–RF-16

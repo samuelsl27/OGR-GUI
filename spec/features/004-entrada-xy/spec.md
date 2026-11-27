@@ -1,6 +1,6 @@
 # Spec 004 — La entrada X,Y con relativos, polares y coma decimal
 
-> Estado: aprobada (2026-11-27); validada el 2026-11-27, por fusionar y etiquetar (v0.1.3)
+> Estado: hecha (2026-11-27, v0.1.3)
 
 ## Contexto y objetivo
 
