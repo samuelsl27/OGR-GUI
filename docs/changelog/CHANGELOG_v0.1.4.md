@@ -1,4 +1,4 @@
-# OGR GUI 0.1.4 — sin publicar
+# OGR GUI 0.1.4 — 2026-11-28
 
 Un cambio compatible, la [spec 005](../../spec/features/005-punto-decimal/spec.md), que pidió OGR
 FEM2D el 2026-11-28 en la T37 de su spec 006: una sola forma de escribir y leer los números en

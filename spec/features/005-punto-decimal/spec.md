@@ -1,6 +1,6 @@
 # Spec 005 — Los números en pantalla, siempre con punto decimal
 
-> Estado: aprobada (2026-11-28)
+> Estado: hecha (2026-11-28, v0.1.4)
 
 ## Contexto y objetivo
 

@@ -24,7 +24,7 @@ suite entera en verde. Una tarea cada vez.
   - el texto y el valor coinciden al redondear (`0.12345` con 4 decimales);
   - `QLocale()` queda como estaba.
 
-  Cubre RF-5 a RF-10 y RF-12.
+  Cubre RF-5–RF-10 y RF-12.
   - Hecho cuando: esas clases están en verde y la suite entera está en verde, sin fugas.
 - [x] **T3** Las piezas que escriben números pasan a `format_number`: `ColourScaleLegend.format_value`,
   `ContourSettings.format_value` (y con él `band_label` y el tamaño del intervalo) y
@@ -64,7 +64,7 @@ suite entera en verde. Una tarea cada vez.
   - la respuesta a FEM2D en `GUI/notas/2026_11_28_respuesta_a_fem2d_punto_decimal.md`.
   - Hecho cuando: los archivos dicen lo mismo que la spec y el plan, `test_version_v010` está en
     verde, y la suite entera está en verde.
-- [x] **T7** Validación final, RF-1 a RF-12.
+- [x] **T7** Validación final, RF-1–RF-12.
   - Hecho cuando:
     - cada RF tiene su test en verde en la tabla «Validación» de la spec;
     - la lista de diseño está marcada, con capturas sin pantalla de los dos diálogos y de la
@@ -73,4 +73,4 @@ suite entera en verde. Una tarea cada vez.
     - la suite de FEM2D pasa contra este árbol;
     - la CI de la PR está en verde en Linux, Windows y macOS.
 
-Todos los RF de la spec (RF-1 a RF-12) están en alguna tarea.
+Todos los RF de la spec (RF-1–RF-12) están en alguna tarea.

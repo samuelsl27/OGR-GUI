@@ -55,7 +55,7 @@ Matplotlib), con `ogr_ui` en lugar de `ogr_gui`.
 | Spec 002: el percentil del ajuste, por campo | OGR FEM2D | Hecha en la 0.1.1; FEM2D la adopta cuando suba su fijación (`CHANGELOG_v0.1.1.md`, sección 4) |
 | Spec 003: el español de los mensajes del núcleo | OGR FEM2D (y Slip2D al adoptar) | Hecha en la 0.1.2; FEM2D la adopta cuando suba su fijación (`CHANGELOG_v0.1.2.md`, sección 5) |
 | Spec 004: la entrada X,Y con relativos, polares y coma decimal | OGR FEM2D | Hecha en la 0.1.3; FEM2D la adopta cuando suba su fijación (`CHANGELOG_v0.1.3.md`, sección 4) |
-| Spec 005: los números en pantalla, siempre con punto decimal | OGR FEM2D (y OGR Data al adoptar) | En `dev/005-punto-decimal`, para la 0.1.4; FEM2D cambia primero su D12 (`PENDIENTE_v0.1.4.md`, sección 4) |
+| Spec 005: los números en pantalla, siempre con punto decimal | OGR FEM2D (y OGR Data al adoptar) | Hecha en la 0.1.4; FEM2D ya cambió su D12 (`3ec4fc8`) y la adopta cuando suba su fijación (`CHANGELOG_v0.1.4.md`, sección 4) |
 
 ## Pendiente de OGR Slip2D, para cuando lo adopte
 
