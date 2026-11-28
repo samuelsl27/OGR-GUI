@@ -12,10 +12,11 @@
 | [003 — El español de los mensajes del núcleo](../features/003-espanol-del-nucleo/spec.md) | 0.1.2 (2026-11-27) | El español de las plantillas de los 20 catálogos con código de `ogr_core` v0.2.12, en `ogr_ui/i18n/core_es.py`; `tr()` lo tiene sin que el programa haga nada |
 | [004 — La entrada X,Y con relativos, polares y coma decimal](../features/004-entrada-xy/spec.md) | 0.1.3 (2026-11-27) | La entrada X,Y lee `x; y` con coma decimal, `@dx, dy` y `@d<a` desde el punto que da el programa, y dice por qué rechaza lo que no puede leer (`ogr_ui/point_entry.py`) |
 | [005 — Los números en pantalla, siempre con punto decimal](../features/005-punto-decimal/spec.md) | 0.1.4 (2026-11-28) | El punto decimal siempre, en los dos idiomas y en cualquier máquina: `ogr_ui.numbers` (`format_number`, `read_number`) y la casilla `NumberBox`, en la que la coma no se escribe; los diálogos de contornos y de enganche, la leyenda, la barra y el gráfico XY |
+| [006 — En la entrada X,Y, la coma separa y el punto es el decimal](../features/006-coma-separa-coordenadas/spec.md) | 0.2.0 (2026-11-28) | Incompatible: la entrada X,Y lee solo `x.x,x.x`; deja de leer la coma decimal, el espacio solo y el punto y coma. D-7 enmendado. Con la gemela de Slip2D 0.1.506: `ContourSettings.automatic` en Viridis |
 
 ## En curso
 
-Nada. La spec 005, del escrito de OGR FEM2D del 2026-11-28, está hecha.
+Nada. Las specs 005 y 006, del 2026-11-28, están hechas.
 
 ## Pendiente de decidir
 

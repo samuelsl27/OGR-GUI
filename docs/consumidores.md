@@ -12,7 +12,7 @@ más que para su runner de tests, que entra por el extra `[test]`.
 
 | Programa | Repositorio | `ogr-gui` que fija | Desde | Suite entera |
 |---|---|---|---|---|
-| OGR FEM2D | `samuelsl27/OGR-FEM2D` | `v0.1.0` | 2026-11-24 (su spec 006, T19, `c49831d`) | `python tests/_runner.py` |
+| OGR FEM2D | `samuelsl27/OGR-FEM2D` | `v0.1.3` | 2026-11-27 (`41a6c5d`, desde la `v0.1.0` del 2026-11-24, `c49831d`) | `python tests/_runner.py` |
 
 - **La verdad es el `pyproject.toml` de cada programa**
   (`ogr-gui @ git+https://github.com/samuelsl27/OGR-GUI@vX.Y.Z`). Esta tabla la repite para que se
@@ -37,7 +37,7 @@ Lo que en OGR Slip2D estaba atado al programa o al núcleo y aquí se recibe:
 | Contornos | `SCALAR_FIELDS`, `available_fields`, `ContourSettings.for_field` (el 0–6 del factor de seguridad) | `ContourField` y `RangePreset`, que da el programa al diálogo; desde la 0.1.1, `ContourField.fit_percentile` (0,98 por defecto; 1 para el rango entero), que el programa pasa también a `fit_to` cuando ajusta el rango al dibujar |
 | Leyenda | título por defecto «Factor of safety» | título vacío: lo pone el programa |
 | Modo de los *data tips* | `ogr_gui.data_tips.DataTipMode` | `ogr_ui.data_tip_mode.DataTipMode` (los *data tips* siguen en el programa) |
-| Entrada X,Y | solo absolutos con punto decimal; la ayuda habla de la polilínea de Slip2D | desde la 0.1.3, relativos (`@dx, dy`), polares (`@d<a`) y coma decimal, desde el punto que el programa da con `set_point_reference`; lo que no se puede leer se queda con su motivo en la barra |
+| Entrada X,Y | solo absolutos con punto decimal; la ayuda habla de la polilínea de Slip2D | desde la 0.1.3, relativos (`@dx, dy`) y polares (`@d<a`), desde el punto que el programa da con `set_point_reference`; lo que no se puede leer se queda con su motivo en la barra. Desde la 0.2.0, `x.x,x.x`: solo la coma separa y el decimal es el punto |
 | Números en pantalla | f-strings y `QDoubleSpinBox` con la configuración de la máquina | desde la 0.1.4, siempre con punto: `ogr_ui.numbers.format_number` para escribir y `ogr_ui.widgets.NumberBox` para las casillas, en las que la coma no se escribe |
 | Iconos | solo el catálogo | `register()` para las claves propias; una clave de la suite no se redefine |
 | `tr()` | el diccionario entero del programa | el mecanismo y el español de estas piezas; desde la 0.1.2, también el de las plantillas de los mensajes con código del núcleo, que el programa ya no lleva; el programa añade el suyo con `add_translations()`, que devuelve las claves que cambió |
@@ -52,10 +52,11 @@ Matplotlib), con `ogr_ui` en lugar de `ogr_gui`.
 
 | Cambio | Para quién | Estado |
 |---|---|---|
-| Spec 002: el percentil del ajuste, por campo | OGR FEM2D | Hecha en la 0.1.1; FEM2D la adopta cuando suba su fijación (`CHANGELOG_v0.1.1.md`, sección 4) |
-| Spec 003: el español de los mensajes del núcleo | OGR FEM2D (y Slip2D al adoptar) | Hecha en la 0.1.2; FEM2D la adopta cuando suba su fijación (`CHANGELOG_v0.1.2.md`, sección 5) |
-| Spec 004: la entrada X,Y con relativos, polares y coma decimal | OGR FEM2D | Hecha en la 0.1.3; FEM2D la adopta cuando suba su fijación (`CHANGELOG_v0.1.3.md`, sección 4) |
+| Spec 002: el percentil del ajuste, por campo | OGR FEM2D | Hecha en la 0.1.1; adoptada por FEM2D con la `v0.1.3` (`41a6c5d`) |
+| Spec 003: el español de los mensajes del núcleo | OGR FEM2D (y Slip2D al adoptar) | Hecha en la 0.1.2; adoptada por FEM2D con la `v0.1.3` (`41a6c5d`) |
+| Spec 004: la entrada X,Y con relativos, polares y coma decimal | OGR FEM2D | Hecha en la 0.1.3; adoptada por FEM2D con la `v0.1.3` (`41a6c5d`) |
 | Spec 005: los números en pantalla, siempre con punto decimal | OGR FEM2D (y OGR Data al adoptar) | Hecha en la 0.1.4; FEM2D ya cambió su D12 (`3ec4fc8`) y la adopta cuando suba su fijación (`CHANGELOG_v0.1.4.md`, sección 4) |
+| Spec 006: en la entrada X,Y, la coma separa y el punto es el decimal | OGR FEM2D (y Slip2D y OGR Data al adoptar) | Hecha en la 0.2.0, **incompatible**; FEM2D avisado antes de la etiqueta y adaptado (`CHANGELOG_v0.2.0.md`, sección 4) |
 
 ## Pendiente de OGR Slip2D, para cuando lo adopte
 
@@ -67,10 +68,12 @@ escribirlos al adoptarlo. Se anotan al recibirlos; se tachan cuando Slip2D fije 
   Newmark. Es de dominio y no entra aquí: con `ogr_ui` 0.1.3 es un `ContourField` por magnitud,
   que el programa da al diálogo según lo que informe la corrida
   (comprobado el 2026-11-27 con `defaults()` y `fit_to(values, field.fit_percentile)`):
-  - Ky: `start=ContourSettings(palette="Hot to cold", intervals=8, auto_range=True, decimals=4)`,
-    con el `fit_percentile` de 0,98 por defecto. Rojo en el valor bajo;
-  - Newmark: lo mismo con `decimals=3, reverse=True` y `fit_percentile=1.0`. Rojo en el valor
+  - Ky: `start=ContourSettings(palette="Viridis", intervals=8, auto_range=True, decimals=4)`,
+    con el `fit_percentile` de 0,98 por defecto. Oscuro en el valor bajo;
+  - Newmark: lo mismo con `decimals=3, reverse=True` y `fit_percentile=1.0`. Oscuro en el valor
     alto, y el extremo no se recorta;
+
+  (Corregido con la 0.2.0: era «Hot to cold», rojo en el extremo crítico, hasta Slip2D 0.1.506.)
   - factor: el `ContourField` del factor de siempre (0–6 en 24 bandas).
 
   La marca de la leyenda (`ColourScaleLegend.configure(mark=...)`) no cambia: recibe el Ky o el
@@ -95,6 +98,14 @@ escribirlos al adoptarlo. Se anotan al recibirlos; se tachan cuando Slip2D fije 
   `core_es.py`. Lo único compartido que usa el camino es `disabled_reasons.gate`, idéntica en los
   dos repositorios y sin cambios: desmarcar una entrada que se queda gris lo hace Slip2D por su
   cuenta (`refresh_statistics_gates`), no `gate`.
+- **Slip2D 0.1.506 (`c4c46df`), Viridis en todo campo que no es el factor de seguridad.** La
+  propuesta D5 de OGR FEM2D, con el alcance que eligió la propietaria el 2026-11-28: los campos
+  hidráulicos, el Ky y el Newmark empiezan en Viridis (`FIELD_PALETTE`), de luminosidad creciente,
+  oscuros en el extremo crítico. El factor sigue en Rainbow de 24 bandas, 0–6. **Tiene gemela
+  aquí**: `ContourSettings.automatic(field)`, la partida de un `ContourField` sin `start`, decía
+  «Hot to cold». Desde la 0.2.0 usa `FIELD_PALETTE = "Viridis"`, como Slip2D, con un test que
+  calcula la L* de CIE 1976 de cada parada. FEM2D da su propio `start` a cada campo, así que no le
+  cambia nada que no elija él.
 - **Slip2D 0.1.497–0.1.501, `i18n`.** Las entradas nuevas son de catálogos del motor de Slip2D
   (`method.newmark_record_missing`, `method.seismic_static_unstable*`, `stat.sens_no_range`), dos
   *tooltips* del lienzo y la nota de la página Seismic. Ninguna es de `ogr_core`, así que nada va

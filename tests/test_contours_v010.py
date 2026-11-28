@@ -356,9 +356,30 @@ class TestContourField:
         s = ContourSettings.automatic("head")
         assert s.field == "head"
         assert s.auto_range is True
-        assert s.palette == "Hot to cold" and s.palette in PALETTES
+        # 0.2.0: Viridis, as OGR Slip2D 0.1.506 (until then «Hot to cold»)
+        assert s.palette == "Viridis" and s.palette in PALETTES
         assert s.intervals == 8
         assert s.decimals == 2
+
+    def test_the_field_palette_grows_in_lightness(self):
+        """0.2.0 -- the palette a field starts from reads in grey: its CIE
+        1976 L* grows from stop to stop (sRGB to linear, the D65 Y, then
+        L* = 116 f(Y) - 16, written out here and not taken from the code)."""
+        from ogr_ui.contours import FIELD_PALETTE
+
+        def lightness(hex_colour):
+            def linear(c):
+                c /= 255.0
+                return c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4
+            r, g, b = (int(hex_colour[i:i + 2], 16) for i in (1, 3, 5))
+            y = 0.2126 * linear(r) + 0.7152 * linear(g) + 0.0722 * linear(b)
+            f = y ** (1 / 3) if y > (6 / 29) ** 3 else y / (3 * (6 / 29) ** 2) + 4 / 29
+            return 116 * f - 16
+
+        assert FIELD_PALETTE == "Viridis"
+        ls = [lightness(c) for c in PALETTES[FIELD_PALETTE]]
+        assert all(b > a for a, b in zip(ls, ls[1:])), ls
+        assert ls[0] < 20 and ls[-1] > 85, ls
 
 
 # ======================================================================

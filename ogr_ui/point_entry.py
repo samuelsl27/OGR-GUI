@@ -1,26 +1,28 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 # Copyright (C) 2026 Samuel Sáez López — Universidad Politécnica de Cartagena
 """
-What a typed point means (OGR GUI 0.1.3, spec 004), without Qt.
+What a typed point means (OGR GUI 0.1.3, spec 004; 0.2.0, spec 006),
+without Qt.
 
 :func:`read_point` reads the text of the X,Y entry of the status bar, or
 of any other field that takes a point:
 
-* **absolute**: two numbers separated by ``;`` (``1,5; 2,5``), by spaces
-  with or without a comma just before them (``1,5 2,5``, ``1.5, 2.5``), or
-  by one comma with no spaces, the decimal mark then being the point
-  (``1.5,2.5``, ``3,4``);
-* **relative** to a reference point: ``@dx, dy``, the two numbers by the
-  same rules;
+* **absolute**: two numbers separated by **one comma**, with or without
+  spaces around it (``1.5,2.5``, ``1.5, 2.5``);
+* **relative** to a reference point: ``@dx,dy``, the two numbers by the
+  same rule;
 * **polar** from it: ``@distance<angle``, the angle in degrees from +x,
   anticlockwise. A cosine or a sine within 1e-15 of zero is zero, so
   ``@1<90`` is exactly one up.
 
-Each number has a point or a comma as its decimal mark, a sign and an
-exponent. What is ambiguous (``1,5,2,5``) or not a point is refused with
-:class:`PointEntryError`, whose text says how to write it: nothing is
-guessed (design reference D-7). The rules are OGR FEM2D's (its spec 006,
-D10 and D12), which asked for this.
+Each number is read by :func:`ogr_ui.numbers.read_number`, as the number
+boxes read theirs: a sign, figures, a decimal **point** and an exponent.
+Since 0.2.0 (spec 006, the owner's criterion of 2026-11-28) the comma only
+separates the coordinates: a decimal comma (``1,5; 2,5``), a lone space
+(``1.5 2.5``) and a semicolon (``1.5;2.5``) are refused, as is anything
+that is not one comma between two numbers. A refusal is a
+:class:`PointEntryError` whose text says how to write a point: nothing is
+guessed (design reference D-7). ``1,5`` is the point (1, 5).
 
 The reference point and the units are the program's: the reader adds and
 returns numbers. The messages are English keys of ``tr()``; whoever shows
@@ -31,19 +33,18 @@ Author: Samuel Sáez López (UPCT)
 from __future__ import annotations
 
 import math
-import re
 from typing import Optional
+
+from ogr_ui.numbers import read_number
 
 Point = tuple[float, float]
 
 #: The reasons a typed point is refused (keys of ``tr()``).
-WRITE_A_POINT = ("Write a point as x, y (or x; y with decimal commas), "
+WRITE_A_POINT = ("Write a point as x, y with a decimal point (1.5, 2.5), "
                  "@dx, dy or @distance<angle.")
 WRITE_A_POLAR = ("Write a polar point as @distance<angle, with the angle "
                  "in degrees.")
 NEEDS_A_FIRST = "A relative point needs a first point: give it as x, y."
-
-_NUMBER = re.compile(r"[-+]?(?:\d+(?:[.,]\d*)?|[.,]\d+)(?:[eE][-+]?\d+)?")
 
 #: Below this, a cosine or a sine of the polar angle is zero.
 _ZERO = 1e-15
@@ -55,24 +56,15 @@ class PointEntryError(ValueError):
 
 
 def _number(text: str, reason: str) -> float:
-    if not _NUMBER.fullmatch(text):
-        raise PointEntryError(reason)
-    value = float(text.replace(",", "."))
-    if not math.isfinite(value):
-        raise PointEntryError(reason)
-    return value
+    try:
+        return read_number(text)
+    except ValueError:
+        raise PointEntryError(reason) from None
 
 
 def _pair(body: str) -> Point:
-    body = body.strip()
-    if ";" in body:
-        parts = [p.strip() for p in body.split(";")]
-    else:
-        parts = body.split()
-        if len(parts) == 2 and parts[0].endswith(","):
-            parts[0] = parts[0][:-1]                  # "1.5, 2.5"
-        elif len(parts) == 1 and body.count(",") == 1:
-            parts = body.split(",")                   # "1.5,2.5", "3,4"
+    # 0.2.0 (spec 006) -- exactly one comma between two numbers
+    parts = body.split(",")
     if len(parts) != 2:
         raise PointEntryError(WRITE_A_POINT)
     return (_number(parts[0], WRITE_A_POINT),

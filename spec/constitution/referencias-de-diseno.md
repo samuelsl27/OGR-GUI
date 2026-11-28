@@ -142,9 +142,12 @@ poder citarlos (`D-3`) en una spec, un test o una revisión.
 
 ### D-7. Entradas tolerantes, nunca silenciosas
 
-- Se acepta lo que no es ambiguo (espacios, coma o punto decimal, `12.5, 3.2` o `12.5 3.2` en la
-  entrada X,Y de la barra de estado) y se rechaza lo ambiguo en el campo, al escribir, con un
-  mensaje que dice qué falta.
+- Se acepta lo que no es ambiguo (espacios alrededor, `12.5, 3.2` o `12.5,3.2` en la entrada X,Y
+  de la barra de estado) y se rechaza lo ambiguo en el campo, al escribir, con un mensaje que dice
+  qué falta.
+- El separador decimal es siempre el punto, en los dos idiomas (spec 005); en una casilla, la coma
+  no se escribe, y en la entrada X,Y la coma separa las dos coordenadas. (Enmendado el 2026-11-28
+  con la spec 006: antes se aceptaban la coma o el punto decimal, y `12.5 3.2`.)
 - Un campo tiene su etiqueta, su unidad, su rango y su formato; si hace falta, una pista.
 - *Por qué*: la ley de Postel, con su límite en un programa de ingeniería (lo que se acepta se
   enseña tal como se entendió); Checklist Design, «Input field».

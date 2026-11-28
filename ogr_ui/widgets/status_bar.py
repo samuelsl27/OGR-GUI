@@ -4,10 +4,12 @@
 Custom status bar with SNAP / GRID / ORTHO / OSNAP toggles, live
 coordinate readout, and a manual X,Y entry field for typing an exact
 point (Slip2D v0.1.3). Since OGR GUI 0.1.3 (spec 004, asked by OGR FEM2D)
-the entry reads relative and polar points and the decimal comma with
-:mod:`ogr_ui.point_entry`, from the reference point the program gives
+the entry reads relative and polar points with :mod:`ogr_ui.point_entry`,
+from the reference point the program gives
 (:meth:`OgrStatusBar.set_point_reference`), and says in the bar why it
-refuses what it cannot read.
+refuses what it cannot read. Since 0.2.0 (spec 006) a point is written
+``x.x,x.x``: the comma separates the coordinates and the decimal mark is
+the point.
 
 Author: Samuel Sáez López (UPCT)
 """
@@ -93,9 +95,8 @@ class _CoordInput(QLineEdit):
         # no wider: the messages of the bar keep their room
         self.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         self.setToolTip(tr(
-            "Type a point and press Enter: x, y (or x; y with decimal "
-            "commas), @dx, dy from the last point, or @distance<angle in "
-            "degrees."))
+            "Type a point and press Enter: x, y with a decimal point, "
+            "@dx, dy from the last point, or @distance<angle in degrees."))
         self.returnPressed.connect(self._submit)
 
     def sizeHint(self) -> QSize:  # noqa: N802

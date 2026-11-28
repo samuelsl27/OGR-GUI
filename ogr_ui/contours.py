@@ -93,6 +93,16 @@ PALETTES: dict[str, tuple[str, ...]] = {
 
 DEFAULT_PALETTE = "Rainbow (24 bands)"
 
+#: 0.2.0 -- the starting palette of a field with no start of its own
+#: (:meth:`ContourSettings.automatic`), as OGR Slip2D 0.1.506 does for every
+#: field that is not the factor of safety (OGR FEM2D's proposal D5, the
+#: owner's decision of 2026-11-28). Its lightness (CIELAB L*) grows with the
+#: value, so the order of the values reads in a grey copy and to a reader
+#: who does not tell red from green; a divergent ramp such as «Hot to cold»,
+#: light in the middle, only says something when the middle is a value with
+#: a meaning.
+FIELD_PALETTE = "Viridis"
+
 # Palettes whose stops ARE the bands, one colour each, rather than a
 # continuous ramp to be sampled. When the interval count matches the stop
 # count the colour is taken straight from the list, which is the only way
@@ -245,12 +255,13 @@ class ContourSettings:
     @classmethod
     def automatic(cls, field: str) -> "ContourSettings":
         """The starting point of a field with no fixed range: the range
-        follows the data, in eight bands of a diverging palette.
+        follows the data, in eight bands of ``FIELD_PALETTE`` (0.2.0, as
+        OGR Slip2D 0.1.506; until then «Hot to cold», a diverging one).
 
         In OGR Slip2D this was what every field but the factor of safety
         started from (``for_field``), because a total head in metres does
         not live in 0–6 and no fixed range would suit two models."""
-        return cls(field=field, palette="Hot to cold", intervals=8,
+        return cls(field=field, palette=FIELD_PALETTE, intervals=8,
                    auto_range=True, decimals=2)
 
     @classmethod
