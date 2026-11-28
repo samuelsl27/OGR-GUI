@@ -38,6 +38,7 @@ Lo que en OGR Slip2D estaba atado al programa o al núcleo y aquí se recibe:
 | Leyenda | título por defecto «Factor of safety» | título vacío: lo pone el programa |
 | Modo de los *data tips* | `ogr_gui.data_tips.DataTipMode` | `ogr_ui.data_tip_mode.DataTipMode` (los *data tips* siguen en el programa) |
 | Entrada X,Y | solo absolutos con punto decimal; la ayuda habla de la polilínea de Slip2D | desde la 0.1.3, relativos (`@dx, dy`), polares (`@d<a`) y coma decimal, desde el punto que el programa da con `set_point_reference`; lo que no se puede leer se queda con su motivo en la barra |
+| Números en pantalla | f-strings y `QDoubleSpinBox` con la configuración de la máquina | desde la 0.1.4, siempre con punto: `ogr_ui.numbers.format_number` para escribir y `ogr_ui.widgets.NumberBox` para las casillas, en las que la coma no se escribe |
 | Iconos | solo el catálogo | `register()` para las claves propias; una clave de la suite no se redefine |
 | `tr()` | el diccionario entero del programa | el mecanismo y el español de estas piezas; desde la 0.1.2, también el de las plantillas de los mensajes con código del núcleo, que el programa ya no lleva; el programa añade el suyo con `add_translations()`, que devuelve las claves que cambió |
 | Reglas 2 y 3 | tests del programa | `ogr_ui.testing.texts` y `ogr_ui.testing.menus`, llamados por los tests del programa |
@@ -54,6 +55,7 @@ Matplotlib), con `ogr_ui` en lugar de `ogr_gui`.
 | Spec 002: el percentil del ajuste, por campo | OGR FEM2D | Hecha en la 0.1.1; FEM2D la adopta cuando suba su fijación (`CHANGELOG_v0.1.1.md`, sección 4) |
 | Spec 003: el español de los mensajes del núcleo | OGR FEM2D (y Slip2D al adoptar) | Hecha en la 0.1.2; FEM2D la adopta cuando suba su fijación (`CHANGELOG_v0.1.2.md`, sección 5) |
 | Spec 004: la entrada X,Y con relativos, polares y coma decimal | OGR FEM2D | Hecha en la 0.1.3; FEM2D la adopta cuando suba su fijación (`CHANGELOG_v0.1.3.md`, sección 4) |
+| Spec 005: los números en pantalla, siempre con punto decimal | OGR FEM2D (y OGR Data al adoptar) | Hecha en la 0.1.4; FEM2D ya cambió su D12 (`3ec4fc8`) y la adopta cuando suba su fijación (`CHANGELOG_v0.1.4.md`, sección 4) |
 
 ## Pendiente de OGR Slip2D, para cuando lo adopte
 

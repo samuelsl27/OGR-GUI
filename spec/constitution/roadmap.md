@@ -11,10 +11,11 @@
 | [002 — El percentil del ajuste, por campo](../features/002-percentil-del-ajuste/spec.md) | 0.1.1 (2026-11-27) | Cada `ContourField` dice el percentil de su ajuste (FEM2D: el rango entero); D-12 enmendado |
 | [003 — El español de los mensajes del núcleo](../features/003-espanol-del-nucleo/spec.md) | 0.1.2 (2026-11-27) | El español de las plantillas de los 20 catálogos con código de `ogr_core` v0.2.12, en `ogr_ui/i18n/core_es.py`; `tr()` lo tiene sin que el programa haga nada |
 | [004 — La entrada X,Y con relativos, polares y coma decimal](../features/004-entrada-xy/spec.md) | 0.1.3 (2026-11-27) | La entrada X,Y lee `x; y` con coma decimal, `@dx, dy` y `@d<a` desde el punto que da el programa, y dice por qué rechaza lo que no puede leer (`ogr_ui/point_entry.py`) |
+| [005 — Los números en pantalla, siempre con punto decimal](../features/005-punto-decimal/spec.md) | 0.1.4 (2026-11-28) | El punto decimal siempre, en los dos idiomas y en cualquier máquina: `ogr_ui.numbers` (`format_number`, `read_number`) y la casilla `NumberBox`, en la que la coma no se escribe; los diálogos de contornos y de enganche, la leyenda, la barra y el gráfico XY |
 
 ## En curso
 
-Nada. Las tres specs del escrito de OGR FEM2D del 2026-11-24 y 25 (002, 003 y 004) están hechas.
+Nada. La spec 005, del escrito de OGR FEM2D del 2026-11-28, está hecha.
 
 ## Pendiente de decidir
 
@@ -30,6 +31,7 @@ Lo que se encontró al hacer la 0.1.0 o al escribir las
 | Estado vacío | Una pieza para «nada todavía», «sin resultados» y «no se pudo cargar» | D-13 |
 | «Fit to results» | Que se deshabilite cuando los valores no son del campo elegido | D-4, D-9 |
 | Traductores de Qt | Que `switch_qt_translator` borre el que quita (hoy queda uno muerto por cambio de idioma). Igual en Slip2D | — |
+| El mínimo del espaciado de la rejilla | El diálogo de enganche pide `lo=1e-6` con 4 decimales, y Qt lo redondea a 0: se puede escribir un espaciado 0. Igual en Slip2D. Encontrado con la spec 005 | Regla 7; D-7 |
 | Notas largas en diálogos estrechos | `hold_wrapped_height` mide a la anchura mínima: con una nota muy larga y una anchura mínima pequeña, la altura puede pasar de la pantalla | D-10 |
 
 ## Para después

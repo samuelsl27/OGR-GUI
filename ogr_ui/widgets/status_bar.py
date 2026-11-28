@@ -30,6 +30,7 @@ from PySide6.QtWidgets import (
 )
 
 from ogr_ui.i18n import tr
+from ogr_ui.numbers import format_number
 
 
 # ----------------------------------------------------------------------
@@ -295,7 +296,10 @@ class OgrStatusBar(ElidingStatusBar):
             t._refresh()
 
     def update_coords(self, x: float, y: float) -> None:
-        self.coord_label.setText(f"X: {x:+.3f}   Y: {y:+.3f}")
+        # 0.1.4 (spec 005) -- always a decimal point, in every language
+        self.coord_label.setText(
+            f"X: {format_number(x, 3, signed=True)}   "
+            f"Y: {format_number(y, 3, signed=True)}")
 
     # ------------------------------------------------------------------
     def add_toggle(self, text: str, active: bool = False):

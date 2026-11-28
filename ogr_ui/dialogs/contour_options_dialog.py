@@ -43,7 +43,6 @@ from PySide6.QtWidgets import (
     QComboBox,
     QDialog,
     QDialogButtonBox,
-    QDoubleSpinBox,
     QFormLayout,
     QGroupBox,
     QLabel,
@@ -53,6 +52,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from ogr_ui.widgets.number_box import NumberBox
 from ogr_ui.contours import (
     PALETTES,
     ContourField,
@@ -137,12 +137,14 @@ class ContourOptionsDialog(QDialog):
         self.chk_auto.setChecked(self.settings.auto_range)
         self.chk_auto.toggled.connect(self._on_auto_toggled)
         fr.addRow("", self.chk_auto)
-        self.sp_min = QDoubleSpinBox()
+        # 0.1.4 (spec 005) -- a decimal point on any machine: a Qt box on a
+        # Spanish one read «2.5» as 25
+        self.sp_min = NumberBox()
         self.sp_min.setDecimals(4)
         self.sp_min.setRange(-1e9, 1e9)
         self.sp_min.setValue(self.settings.vmin)
         fr.addRow(tr("Minimum:"), self.sp_min)
-        self.sp_max = QDoubleSpinBox()
+        self.sp_max = NumberBox()
         self.sp_max.setDecimals(4)
         self.sp_max.setRange(-1e9, 1e9)
         self.sp_max.setValue(self.settings.vmax)

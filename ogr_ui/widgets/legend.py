@@ -27,6 +27,7 @@ from PySide6.QtGui import QColor, QFont, QLinearGradient, QPainter, QPen
 from PySide6.QtWidgets import QLabel, QSizePolicy, QWidget
 
 from ogr_ui.i18n import tr
+from ogr_ui.numbers import format_number
 from ogr_ui.themes import theme_color
 
 
@@ -105,9 +106,8 @@ class ColourScaleLegend(QWidget):
         return self._vmin, self._vmax
 
     def format_value(self, v: float) -> str:
-        if self._scientific:
-            return f"{v:.{self._decimals}e}"
-        return f"{v:.{self._decimals}f}"
+        # 0.1.4 (spec 005) -- always a decimal point, in every language
+        return format_number(v, self._decimals, scientific=self._scientific)
 
     # ------------------------------------------------------------------
     def paintEvent(self, _event) -> None:  # noqa: N802

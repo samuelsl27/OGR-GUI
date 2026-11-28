@@ -41,6 +41,8 @@ import math
 from dataclasses import dataclass, field
 from enum import Enum
 
+from ogr_ui.numbers import format_number
+
 
 class ContourMode(Enum):
     """How the scalar field is drawn."""
@@ -209,9 +211,8 @@ class ContourSettings:
                 for i in range(n)]
 
     def format_value(self, v: float) -> str:
-        if self.scientific:
-            return f"{v:.{self.decimals}e}"
-        return f"{v:.{self.decimals}f}"
+        # 0.1.4 (spec 005) -- always a decimal point, in every language
+        return format_number(v, self.decimals, scientific=self.scientific)
 
     # ------------------------------------------------------------------
     def fit_to(self, values, percentile: float = 0.98) -> None:
