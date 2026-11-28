@@ -56,44 +56,52 @@ def _refused(text, reference=None):
 
 class TestAnAbsolutePoint:
     def test_every_separator(self):
-        for text in ("1,5; 2,5", "1.5;2.5", "1,5;2,5", "1,5 2,5",
-                     "1.5 2.5", "1.5, 2.5", "1,5, 2,5", "1.5,2.5",
-                     "1.5   2.5", "1,5 ;  2,5"):
+        # 0.2.0 (spec 006): only a comma separates, and the decimal mark is
+        # the point; the semicolon, the lone space and the decimal comma of
+        # 0.1.3 are refused (tests/test_coordinate_comma_v020.py)
+        for text in ("1.5, 2.5", "1.5,2.5", "1.5 , 2.5"):
             assert read_point(text, None) == (1.5, 2.5), text
+        for text in ("1,5; 2,5", "1.5;2.5", "1,5;2,5", "1,5 2,5",
+                     "1.5 2.5", "1,5, 2,5", "1.5   2.5", "1,5 ;  2,5"):
+            assert _refused(text) == WRITE_A_POINT, text
 
     def test_one_comma_with_no_space_separates(self):
         assert read_point("3,4", None) == (3.0, 4.0)
         assert read_point("1,5", None) == (1.0, 5.0)
-        assert read_point("3,4 5", None) == (3.4, 5.0)
+        # 0.2.0 (spec 006): «3,4 5» was 3,4 and 5; now the comma separates
+        # «3» from «4 5», which is not a number
+        assert _refused("3,4 5") == WRITE_A_POINT
 
     def test_the_numbers(self):
-        assert read_point("-1,5e3; +2", None) == (-1500.0, 2.0)
-        assert read_point(".5 5.", None) == (0.5, 5.0)
-        assert read_point(",5; 5,", None) == (0.5, 5.0)
-        assert read_point("-0 1E-2", None) == (0.0, 0.01)
+        # 0.2.0 (spec 006): written with a decimal point and a comma
+        assert read_point("-1.5e3, +2", None) == (-1500.0, 2.0)
+        assert read_point(".5, 5.", None) == (0.5, 5.0)
+        assert read_point("-0, 1E-2", None) == (0.0, 0.01)
 
     def test_spaces_around(self):
         assert read_point("   1.5, 2.5  ", None) == (1.5, 2.5)
 
     def test_what_010_took_gives_the_same_point(self):
         for text, point in (("12.5, 3.2", (12.5, 3.2)),
-                            ("12.5 3.2", (12.5, 3.2)),
-                            ("12.5;3.2", (12.5, 3.2)),
                             ("-1.25, -2.5", (-1.25, -2.5)),
                             ("3, 4", (3.0, 4.0))):
             assert read_point(text, None) == point, text
+        # 0.2.0 (spec 006), incompatible on purpose: 0.1.0 took these too
+        for text in ("12.5 3.2", "12.5;3.2"):
+            assert _refused(text) == WRITE_A_POINT, text
 
     def test_the_reference_does_not_move_an_absolute_point(self):
-        assert read_point("1; 2", (10.0, 10.0)) == (1.0, 2.0)
+        assert read_point("1, 2", (10.0, 10.0)) == (1.0, 2.0)
 
 
 class TestARelativePoint:
     def test_by_a_shift(self):
         ref = (10.0, 5.0)
         assert read_point("@2, 0", ref) == (12.0, 5.0)
-        assert read_point("@-1,5; 2,5", ref) == (8.5, 7.5)
-        assert read_point("@ 1 2", ref) == (11.0, 7.0)
-        assert read_point("  @0;0 ", ref) == ref
+        # 0.2.0 (spec 006): a decimal point and a comma between them
+        assert read_point("@-1.5, 2.5", ref) == (8.5, 7.5)
+        assert read_point("@ 1, 2", ref) == (11.0, 7.0)
+        assert read_point("  @0,0 ", ref) == ref
 
     def test_polar_identities(self):
         # cos 60 = 1/2, sin 60 = sqrt(3)/2
@@ -107,7 +115,8 @@ class TestARelativePoint:
         assert read_point("@0<90", (3.0, 4.0)) == (3.0, 4.0)
 
     def test_polar_forms(self):
-        assert read_point("@ 2,5 < 90", (0.0, 0.0)) == (0.0, 2.5)
+        # 0.2.0 (spec 006): the distance with a decimal point
+        assert read_point("@ 2.5 < 90", (0.0, 0.0)) == (0.0, 2.5)
         # a negative distance goes the other way; 405 degrees is 45
         x, y = read_point("@-1<45", (0.0, 0.0))
         assert abs(x + 0.5 ** 0.5) < 1e-15 and abs(y + 0.5 ** 0.5) < 1e-15
@@ -166,10 +175,12 @@ class TestTheReaderHasNoQt:
         names = set()
         for node in ast.walk(tree):
             if isinstance(node, ast.Import):
-                names |= {a.name.split(".")[0] for a in node.names}
+                names |= {a.name for a in node.names}
             elif isinstance(node, ast.ImportFrom):
-                names.add((node.module or "").split(".")[0])
-        assert names <= {"__future__", "math", "re", "typing"}, names
+                names.add(node.module or "")
+        # 0.2.0 (spec 006): and ogr_ui.numbers, which has no Qt either
+        assert names <= {"__future__", "math", "re", "typing",
+                         "ogr_ui.numbers"}, names
 
 
 # ======================================================================
@@ -228,11 +239,13 @@ class TestTheEntryHandsOverAnAbsolutePoint:
     def test_each_form_by_the_keyboard(self):
         with _bar() as (bar, points):
             bar.set_point_reference((10.0, 5.0))
-            for text, point in (("1,5; 2,5", (1.5, 2.5)),
+            # 0.2.0 (spec 006): «1,5; 2,5» and «-1,5e1 2» are now written
+            # with a decimal point and a comma
+            for text, point in (("1.5, 2.5", (1.5, 2.5)),
                                 ("12.5, 3.2", (12.5, 3.2)),
                                 ("@2, 0", (12.0, 5.0)),
                                 ("@2<90", (10.0, 7.0)),
-                                ("-1,5e1 2", (-15.0, 2.0))):
+                                ("-1.5e1,2", (-15.0, 2.0))):
                 _type(bar.coord_input, text)
                 assert points[-1] == point, text
                 assert bar.coord_input.text() == "", text
@@ -243,7 +256,7 @@ class TestTheEntryHandsOverAnAbsolutePoint:
             own = []
             bar.coord_input.coords_submitted.connect(
                 lambda x, y: own.append((x, y)))
-            _type(bar.coord_input, "12.5;3.2")
+            _type(bar.coord_input, "12.5,3.2")     # 0.2.0: not «12.5;3.2»
             assert own == points == [(12.5, 3.2)]
 
     def test_an_empty_entry_does_nothing(self):

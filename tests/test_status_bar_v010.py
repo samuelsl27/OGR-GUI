@@ -311,10 +311,16 @@ class TestTheXYField:
                 lambda x, y: own.append((x, y)))
             bar.manual_coords_submitted.connect(
                 lambda x, y: barwide.append((x, y)))
-            for text in ("12.5, 3.2", "12.5 3.2", "12.5;3.2"):
+            # 0.2.0 (spec 006), changed on purpose: only a comma separates;
+            # «12.5 3.2» and «12.5;3.2» are refused and stay in the entry
+            for text in ("12.5, 3.2", "12.5,3.2", "12.5 , 3.2"):
                 _type(bar.coord_input, text)
                 assert bar.coord_input.text() == "", text
             assert own == [(12.5, 3.2)] * 3, own
+            for text in ("12.5 3.2", "12.5;3.2"):
+                _type(bar.coord_input, text)
+                assert bar.coord_input.text() == text, text
+            assert len(own) == 3
             assert barwide == own
             _type(bar.coord_input, "-1.25, -2.5")
             assert own[-1] == (-1.25, -2.5)

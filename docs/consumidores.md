@@ -67,10 +67,12 @@ escribirlos al adoptarlo. Se anotan al recibirlos; se tachan cuando Slip2D fije 
   Newmark. Es de dominio y no entra aquí: con `ogr_ui` 0.1.3 es un `ContourField` por magnitud,
   que el programa da al diálogo según lo que informe la corrida
   (comprobado el 2026-11-27 con `defaults()` y `fit_to(values, field.fit_percentile)`):
-  - Ky: `start=ContourSettings(palette="Hot to cold", intervals=8, auto_range=True, decimals=4)`,
-    con el `fit_percentile` de 0,98 por defecto. Rojo en el valor bajo;
-  - Newmark: lo mismo con `decimals=3, reverse=True` y `fit_percentile=1.0`. Rojo en el valor
+  - Ky: `start=ContourSettings(palette="Viridis", intervals=8, auto_range=True, decimals=4)`,
+    con el `fit_percentile` de 0,98 por defecto. Oscuro en el valor bajo;
+  - Newmark: lo mismo con `decimals=3, reverse=True` y `fit_percentile=1.0`. Oscuro en el valor
     alto, y el extremo no se recorta;
+
+  (Corregido con la 0.2.0: era «Hot to cold», rojo en el extremo crítico, hasta Slip2D 0.1.506.)
   - factor: el `ContourField` del factor de siempre (0–6 en 24 bandas).
 
   La marca de la leyenda (`ColourScaleLegend.configure(mark=...)`) no cambia: recibe el Ky o el
@@ -95,6 +97,14 @@ escribirlos al adoptarlo. Se anotan al recibirlos; se tachan cuando Slip2D fije 
   `core_es.py`. Lo único compartido que usa el camino es `disabled_reasons.gate`, idéntica en los
   dos repositorios y sin cambios: desmarcar una entrada que se queda gris lo hace Slip2D por su
   cuenta (`refresh_statistics_gates`), no `gate`.
+- **Slip2D 0.1.506 (`c4c46df`), Viridis en todo campo que no es el factor de seguridad.** La
+  propuesta D5 de OGR FEM2D, con el alcance que eligió la propietaria el 2026-11-28: los campos
+  hidráulicos, el Ky y el Newmark empiezan en Viridis (`FIELD_PALETTE`), de luminosidad creciente,
+  oscuros en el extremo crítico. El factor sigue en Rainbow de 24 bandas, 0–6. **Tiene gemela
+  aquí**: `ContourSettings.automatic(field)`, la partida de un `ContourField` sin `start`, decía
+  «Hot to cold». Desde la 0.2.0 usa `FIELD_PALETTE = "Viridis"`, como Slip2D, con un test que
+  calcula la L* de CIE 1976 de cada parada. FEM2D da su propio `start` a cada campo, así que no le
+  cambia nada que no elija él.
 - **Slip2D 0.1.497–0.1.501, `i18n`.** Las entradas nuevas son de catálogos del motor de Slip2D
   (`method.newmark_record_missing`, `method.seismic_static_unstable*`, `stat.sens_no_range`), dos
   *tooltips* del lienzo y la nota de la página Seismic. Ninguna es de `ogr_core`, así que nada va

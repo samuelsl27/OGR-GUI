@@ -15,7 +15,9 @@
 
 ## En curso
 
-Nada. La spec 005, del escrito de OGR FEM2D del 2026-11-28, está hecha.
+| Spec | Qué | Estado |
+|---|---|---|
+| [006 — En la entrada X,Y, la coma separa y el punto es el decimal](../features/006-coma-separa-coordenadas/spec.md) | Criterio de la propietaria del 2026-11-28 (y D12 modificada de OGR FEM2D): `x.x,x.x`; deja de leerse la coma decimal, el espacio solo y el punto y coma. Incompatible: 0.2.0 | aprobada (2026-11-28) |
 
 ## Pendiente de decidir
 
