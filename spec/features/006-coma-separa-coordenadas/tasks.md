@@ -41,7 +41,7 @@ suite entera en verde. Una tarea cada vez.
   - el aviso a FEM2D en `GUI/notas/2026_11_28_aviso_a_fem2d_coma_separa_coordenadas.md`.
   - Hecho cuando: los archivos dicen lo mismo que la spec y el plan, `test_version_v010` está en
     verde, y la suite entera está en verde.
-- [ ] **T4** Validación final, RF-1–RF-11.
+- [x] **T4** Validación final, RF-1–RF-11.
   - Hecho cuando:
     - cada RF tiene su test en verde en la tabla «Validación» de la spec;
     - la lista de diseño está marcada, con capturas de la barra a 1366 px en inglés y en español y

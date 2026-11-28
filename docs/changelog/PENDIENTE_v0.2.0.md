@@ -75,6 +75,14 @@ escribía con punto decimal y coma de separador da el mismo punto, por la misma 
   - sus tests de `read_point` (el contrato de la v0.1.3, que aceptan la coma decimal) cambian a
     este criterio;
   - si da su propia ayuda a la entrada, deja de hablar de la coma decimal y del punto y coma;
-  - Viridis no le cambia nada: da su propio `start` a cada campo.
+  - sus puntos escritos en tests con punto y coma (`"1; 0"` en `test_gui_case006_v0014`,
+    `"0; 20"` en `test_gui_tools_v0014`) pasan a `"1, 0"` y `"0, 20"`;
+  - Viridis no cambia lo que dibuja, porque da su propio `start` a cada campo. Pero
+    `test_gui_interpret_v0015::TestTheDefaultPalette::test_its_lightness_grows_with_the_value`
+    usa `ContourSettings.automatic` como ejemplo de la paleta divergente que Viridis sustituyó, y
+    falla con la 0.2.0. Esa comparación tiene que tomar «Hot to cold» por su nombre.
+
+  Su suite contra este árbol: 857 casos, 852 en verde. Fallan los cinco esperados: los cuatro de
+  arriba y `test_the_installed_one`, que fija la v0.1.3.
 - **OGR Slip2D y OGR Data**, cuando adopten el paquete: la entrada lee solo `x.x,x.x`, y un campo
   sin `start` empieza en Viridis, como ya hace Slip2D.
