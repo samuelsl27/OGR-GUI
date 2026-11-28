@@ -115,19 +115,19 @@ Compatibilidad:
 Lista de comprobación (se marca al validar):
 
 **Toda pieza**
-- [ ] No importa el núcleo ni ningún programa.
-- [ ] Sus textos, si los hay, pasan por `tr()` y tienen su español en `i18n/es.py`.
-- [ ] Probada sin pantalla, sin `exec()` y sin dejar estado (regla 5), también la configuración
+- [x] No importa el núcleo ni ningún programa.
+- [x] Sus textos, si los hay, pasan por `tr()` y tienen su español en `i18n/es.py`.
+- [x] Probada sin pantalla, sin `exec()` y sin dejar estado (regla 5), también la configuración
       regional.
 
 **Entrada**
-- [ ] La coma, un segundo punto y una letra no entran (RF-7, RF-9); lo escrito es lo que se lee.
+- [x] La coma, un segundo punto y una letra no entran (RF-7, RF-9); lo escrito es lo que se lee.
 
 **Leyenda y diálogo de contornos**
-- [ ] Las etiquetas de la leyenda y los números del diálogo se escriben igual (D-12).
+- [x] Las etiquetas de la leyenda y los números del diálogo se escriben igual (D-12).
 
 **Y siempre**
-- [ ] Ninguno de los patrones de «Lo que no se hace».
+- [x] Ninguno de los patrones de «Lo que no se hace».
 
 No aplica: colores, iconos, acciones de menú, proceso largo.
 
@@ -190,3 +190,47 @@ coma no se escribe en ella (en esa máquina, hoy era el separador decimal).
 ## Dudas abiertas
 
 - Ninguna.
+
+## Validación
+
+2026-11-28, en la rama `dev/005-punto-decimal`, commit `4b5f71e`. Suite entera sin filtrar: **532
+casos, 532 en verde, sin fugas**, en serie y con `--jobs 4` (Windows). Los tests son de
+`tests/test_numbers_v014.py`.
+
+| RF | Test que lo cubre | Resultado |
+|---|---|---|
+| RF-1 | `TestWritingANumber.test_a_point_and_no_thousands_in_both_languages`; `TestWhatThePiecesWrite` (sus tres casos, con la máquina en España y en inglés y los dos idiomas) | verde |
+| RF-2 | `TestWhatThePiecesWrite.test_the_continuous_legend`, `test_the_bands_and_the_interval`, `test_the_status_bar`; `TestTheDialogsTakeAPoint.test_the_contour_dialog`, `test_the_snap_dialog`; `TestTheChartWritesAPoint.test_with_the_locale_asked_for` | verde |
+| RF-3 | `TestTheChartWritesAPoint.test_with_the_locale_asked_for` (con `use_locale` encendido y la configuración numérica española en Python, que pinta comas sin el arreglo) y `test_a_log_scale_is_still_drawn` | verde |
+| RF-4 | `TestWritingANumber` (sus cinco casos); `TestTheNumbersHaveNoQt`; `TestWhatThePiecesWrite.test_they_write_with_the_one_function` | verde |
+| RF-5 | `TestTheNumberBox.test_it_is_a_qt_double_spin_box`; `TestTheDialogsTakeAPoint` (cada casilla es una `NumberBox`) | verde |
+| RF-6 | `TestReadingANumber.test_what_is_read`; `TestTheNumberBox.test_a_point_is_read_and_shown`, `test_a_second_point_and_a_letter_do_not_go_in` (`-1.5e3`), `test_in_scientific_notation` | verde |
+| RF-7 | `TestTheNumberBox.test_a_comma_writes_nothing` (dos máquinas, dos idiomas), `test_a_paste_with_a_comma_changes_nothing`, `test_with_a_suffix`; `TestTheDialogsTakeAPoint` | verde |
+| RF-8 | `TestReadingANumber.test_one_point_is_always_the_decimal_mark`; `TestTheNumberBox.test_one_point_is_always_the_decimal_mark` | verde |
+| RF-9 | `TestReadingANumber.test_what_is_refused`; `TestTheNumberBox.test_a_second_point_and_a_letter_do_not_go_in`, `test_a_paste_with_a_comma_changes_nothing` (`1.234,56`, `1,000.5`) | verde |
+| RF-10 | `TestTheNumberBox.test_out_of_range_or_half_written_goes_back` | verde |
+| RF-11 | `TestWritingANumber.test_what_the_pieces_wrote_in_013`; `TestWhatThePiecesWrite` (el texto de la 0.1.3, a mano); `TestTheDialogsTakeAPoint.test_the_boxes_keep_what_they_had`; `test_contours_v010`, `test_snap_dialog_v010` (con los de la regla 7), `test_legend_v010` y `test_status_bar_v010`, sin tocar | verde |
+| RF-12 | `TestTheNumberBox.test_the_default_locale_is_left_as_it_was`; `TestTheChartWritesAPoint.test_matplotlib_is_left_as_it_was`; el vigilante de fugas del runner (`qt.locale`, `locale`, `rcParams`) | verde |
+
+Lista de diseño: marcada arriba, mirando la pieza. Capturas sin pantalla
+(`QT_QPA_FONTDIR=C:/Windows/Fonts`) con la configuración de Qt en España, en inglés y en español y en
+los dos temas: el diálogo de contornos, el de enganche y la leyenda (continua y por bandas). Todos
+los números llevan punto («1.0000», «12.0 px», «3.00», «6.000+»). En el máximo del diálogo de
+contornos, tecleado «2,5», queda «25»: la coma no entró. Ningún principio falla.
+
+CI de la [PR #7](https://github.com/samuelsl27/OGR-GUI/pull/7), commit `4b5f71e`: en verde en Linux y
+Windows (Python 3.11, 3.12 y 3.13), en macOS (3.12) y la licencia.
+
+La suite entera de OGR FEM2D (`3ec4fc8`) contra este árbol, con `--jobs 4`: 857 casos, 856 en
+verde. Falla `test_the_installed_one`, como tiene que fallar contra otro árbol (fija la v0.1.3).
+
+Lo que se encontró al validar:
+
+- **FEM2D ya hizo su parte** en `3ec4fc8`, antes de esta validación. «Qué cambia para los
+  programas» pedía cambiar primero su D12, y eso ya está hecho. Lo que le queda está en el changelog
+  y en la respuesta escrita.
+- **Su changelog espera que la entrada X,Y deje de aceptar la coma.** Esta spec lo deja fuera
+  («Fuera de alcance»), y sería un cambio de la spec 004. Lo decide la propietaria.
+- **El mínimo del espaciado de la rejilla es 0, no 1e-6** (Qt lo redondea a los 4 decimales de la
+  casilla). Ya pasaba antes, no se cambia aquí y va a la hoja de ruta.
+
