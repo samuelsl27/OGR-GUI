@@ -56,7 +56,7 @@ Matplotlib), con `ogr_ui` en lugar de `ogr_gui`.
 | Spec 003: el español de los mensajes del núcleo | OGR FEM2D (y Slip2D al adoptar) | Hecha en la 0.1.2; adoptada por FEM2D con la `v0.1.3` (`41a6c5d`) |
 | Spec 004: la entrada X,Y con relativos, polares y coma decimal | OGR FEM2D | Hecha en la 0.1.3; adoptada por FEM2D con la `v0.1.3` (`41a6c5d`) |
 | Spec 005: los números en pantalla, siempre con punto decimal | OGR FEM2D (y OGR Data al adoptar) | Hecha en la 0.1.4; FEM2D ya cambió su D12 (`3ec4fc8`) y la adopta cuando suba su fijación (`CHANGELOG_v0.1.4.md`, sección 4) |
-| Spec 006: en la entrada X,Y, la coma separa y el punto es el decimal | OGR FEM2D (y Slip2D y OGR Data al adoptar) | En `dev/006-coma-separa-coordenadas`, para la 0.2.0, **incompatible**; FEM2D avisado antes de la etiqueta (`PENDIENTE_v0.2.0.md`, sección 4) |
+| Spec 006: en la entrada X,Y, la coma separa y el punto es el decimal | OGR FEM2D (y Slip2D y OGR Data al adoptar) | Hecha en la 0.2.0, **incompatible**; FEM2D avisado antes de la etiqueta y adaptado (`CHANGELOG_v0.2.0.md`, sección 4) |
 
 ## Pendiente de OGR Slip2D, para cuando lo adopte
 

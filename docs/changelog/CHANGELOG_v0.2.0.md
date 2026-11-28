@@ -1,4 +1,4 @@
-# OGR GUI 0.2.0 — sin publicar
+# OGR GUI 0.2.0 — 2026-11-28
 
 **Un cambio incompatible**, la [spec 006](../../spec/features/006-coma-separa-coordenadas/spec.md):
 en la entrada X,Y de la barra de estado, la coma separa las dos coordenadas y el punto es el
@@ -84,5 +84,10 @@ escribía con punto decimal y coma de separador da el mismo punto, por la misma 
 
   Su suite contra este árbol: 857 casos, 852 en verde. Fallan los cinco esperados: los cuatro de
   arriba y `test_the_installed_one`, que fija la v0.1.3.
+
+  **FEM2D se adaptó antes de la etiqueta**, con cambios aún sin confirmar en su árbol: fija la
+  `v0.2.0` y cambió los cuatro tests. Su suite contra el árbol que se etiqueta: 857 casos, 856 en
+  verde. Solo falla `test_the_installed_one`, que mira el paquete instalado y no el de
+  `PYTHONPATH`.
 - **OGR Slip2D y OGR Data**, cuando adopten el paquete: la entrada lee solo `x.x,x.x`, y un campo
   sin `start` empieza en Viridis, como ya hace Slip2D.

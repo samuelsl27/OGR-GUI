@@ -1,6 +1,6 @@
 # Spec 006 — En la entrada X,Y, la coma separa y el punto es el decimal
 
-> Estado: aprobada (2026-11-28)
+> Estado: hecha (2026-11-28, v0.2.0)
 
 ## Contexto y objetivo
 
