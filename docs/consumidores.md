@@ -12,7 +12,7 @@ más que para su runner de tests, que entra por el extra `[test]`.
 
 | Programa | Repositorio | `ogr-gui` que fija | Desde | Suite entera |
 |---|---|---|---|---|
-| OGR FEM2D | `samuelsl27/OGR-FEM2D` | `v0.1.3` | 2026-11-27 (`41a6c5d`, desde la `v0.1.0` del 2026-11-24, `c49831d`) | `python tests/_runner.py` |
+| OGR FEM2D | `samuelsl27/OGR-FEM2D` | `v0.2.0` | 2026-11-28 (`7f44ad4`; antes, la `v0.1.3` desde el 2026-11-27, `41a6c5d`, y la `v0.1.0` desde el 2026-11-24, `c49831d`) | `python tests/_runner.py` |
 
 - **La verdad es el `pyproject.toml` de cada programa**
   (`ogr-gui @ git+https://github.com/samuelsl27/OGR-GUI@vX.Y.Z`). Esta tabla la repite para que se
@@ -55,8 +55,8 @@ Matplotlib), con `ogr_ui` en lugar de `ogr_gui`.
 | Spec 002: el percentil del ajuste, por campo | OGR FEM2D | Hecha en la 0.1.1; adoptada por FEM2D con la `v0.1.3` (`41a6c5d`) |
 | Spec 003: el español de los mensajes del núcleo | OGR FEM2D (y Slip2D al adoptar) | Hecha en la 0.1.2; adoptada por FEM2D con la `v0.1.3` (`41a6c5d`) |
 | Spec 004: la entrada X,Y con relativos, polares y coma decimal | OGR FEM2D | Hecha en la 0.1.3; adoptada por FEM2D con la `v0.1.3` (`41a6c5d`) |
-| Spec 005: los números en pantalla, siempre con punto decimal | OGR FEM2D (y OGR Data al adoptar) | Hecha en la 0.1.4; FEM2D ya cambió su D12 (`3ec4fc8`) y la adopta cuando suba su fijación (`CHANGELOG_v0.1.4.md`, sección 4) |
-| Spec 006: en la entrada X,Y, la coma separa y el punto es el decimal | OGR FEM2D (y Slip2D y OGR Data al adoptar) | Hecha en la 0.2.0, **incompatible**; FEM2D avisado antes de la etiqueta y adaptado (`CHANGELOG_v0.2.0.md`, sección 4) |
+| Spec 005: los números en pantalla, siempre con punto decimal | OGR FEM2D (y OGR Data al adoptar) | Hecha en la 0.1.4; adoptada por FEM2D con la `v0.2.0` (`7f44ad4`) |
+| Spec 006: en la entrada X,Y, la coma separa y el punto es el decimal | OGR FEM2D (y Slip2D y OGR Data al adoptar) | Hecha en la 0.2.0, **incompatible**; adoptada por FEM2D con la `v0.2.0` (`7f44ad4`), avisado antes de la etiqueta |
 
 ## Pendiente de OGR Slip2D, para cuando lo adopte
 
