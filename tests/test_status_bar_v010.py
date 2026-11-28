@@ -350,9 +350,10 @@ class TestTheXYField:
         with _language("es"):
             # 0.1.3 (spec 004), on purpose: a general help, no longer
             # Slip2D's ("While drawing a boundary ... polyline", rule 10)
-            key = ("Type a point and press Enter: x, y (or x; y with decimal "
-                   "commas), @dx, dy from the last point, or @distance<angle "
-                   "in degrees.")
+            # 0.2.0 (spec 006), on purpose: no decimal comma in the help
+            key = ("Type a point and press Enter: x, y with a decimal point, "
+                   "@dx, dy from the last point, or @distance<angle in "
+                   "degrees.")
             spanish = tr(key)
             assert spanish != key
             field = _CoordInput()

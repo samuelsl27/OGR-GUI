@@ -18,7 +18,7 @@ suite entera en verde. Una tarea cada vez.
   que el lector nuevo rompe (pasado aquí desde T2 para dejar la suite en verde). Cubre RF-1–RF-8 y RF-11.
   - Hecho cuando: esas clases y `test_point_entry_v013` están en verde, `point_entry.py` no importa
     Qt ni el núcleo, y la suite entera está en verde.
-- [ ] **T2** Lo que se ve y la entrada en la barra:
+- [x] **T2** Lo que se ve y la entrada en la barra:
   - el motivo `WRITE_A_POINT` y la ayuda nuevos, con su español en `i18n/es.py`, y los viejos
     fuera;
   - la nota del módulo de `status_bar.py`.

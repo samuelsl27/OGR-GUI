@@ -40,7 +40,7 @@ from ogr_ui.numbers import read_number
 Point = tuple[float, float]
 
 #: The reasons a typed point is refused (keys of ``tr()``).
-WRITE_A_POINT = ("Write a point as x, y (or x; y with decimal commas), "
+WRITE_A_POINT = ("Write a point as x, y with a decimal point (1.5, 2.5), "
                  "@dx, dy or @distance<angle.")
 WRITE_A_POLAR = ("Write a polar point as @distance<angle, with the angle "
                  "in degrees.")

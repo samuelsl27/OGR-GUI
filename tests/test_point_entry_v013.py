@@ -36,7 +36,9 @@ import contextlib
 from ogr_ui.point_entry import PointEntryError, read_point
 
 #: The three reasons, the keys of ``tr()``.
-WRITE_A_POINT = ("Write a point as x, y (or x; y with decimal commas), "
+# 0.2.0 (spec 006), changed on purpose: the reason no longer speaks of a
+# decimal comma
+WRITE_A_POINT = ("Write a point as x, y with a decimal point (1.5, 2.5), "
                  "@dx, dy or @distance<angle.")
 WRITE_A_POLAR = ("Write a polar point as @distance<angle, with the angle "
                  "in degrees.")
@@ -336,7 +338,8 @@ class TestARefusalSaysWhyAndKeepsTheText:
 # ======================================================================
 # What is seen
 # ======================================================================
-HELP = ("Type a point and press Enter: x, y (or x; y with decimal commas), "
+# 0.2.0 (spec 006), changed on purpose: nor does the help
+HELP = ("Type a point and press Enter: x, y with a decimal point, "
         "@dx, dy from the last point, or @distance<angle in degrees.")
 PLACEHOLDER = "x, y · @dx, dy · @d<a"
 
