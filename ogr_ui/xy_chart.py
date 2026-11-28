@@ -43,6 +43,7 @@ def show_xy_chart(parent, title, series, xlabel, ylabel, marker="o",
         ax.plot(xs, ys, marker=marker, label=label)
     if yscale != "linear":
         ax.set_yscale(yscale)
+    _numbers_with_a_point(ax)
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
     ax.grid(True, alpha=0.3)
@@ -53,6 +54,18 @@ def show_xy_chart(parent, title, series, xlabel, ylabel, marker="o",
     # compared against the model beside it, and two charts cannot be held
     # open at once.
     return keep_chart(parent, dlg)
+
+
+def _numbers_with_a_point(ax) -> None:
+    """0.1.4 (spec 005) -- the numbers of the axes with a decimal point,
+    even when a program has asked matplotlib for the locale
+    (``axes.formatter.use_locale``): turned off on these axes only, never
+    in ``rcParams``. The logarithmic formatters do not use the locale."""
+    from matplotlib.ticker import ScalarFormatter
+    for axis in (ax.xaxis, ax.yaxis):
+        fmt = axis.get_major_formatter()
+        if isinstance(fmt, ScalarFormatter):
+            fmt.set_useLocale(False)
 
 
 def keep_chart(owner, dlg):

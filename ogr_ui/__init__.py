@@ -18,4 +18,4 @@ the code and ``sys.modules`` for that (``tests/test_layering_v010.py``).
 
 Developer: Samuel Sáez López — PhD Student, UPCT
 """
-__version__ = "0.1.3"
+__version__ = "0.1.4.dev0"

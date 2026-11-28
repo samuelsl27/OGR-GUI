@@ -14,7 +14,9 @@
 
 ## En curso
 
-Nada. Las tres specs del escrito de OGR FEM2D del 2026-11-24 y 25 (002, 003 y 004) están hechas.
+| Spec | Qué | Estado |
+|---|---|---|
+| [005 — Los números en pantalla, siempre con punto decimal](../features/005-punto-decimal/spec.md) | Escrito de OGR FEM2D del 2026-11-28 (T37 de su spec 006). La propietaria decide el punto siempre, en los dos idiomas; en una casilla, la coma no se escribe. Una forma común de escribir un número y una casilla común, en todas las piezas | aprobada (2026-11-28) |
 
 ## Pendiente de decidir
 
@@ -30,6 +32,7 @@ Lo que se encontró al hacer la 0.1.0 o al escribir las
 | Estado vacío | Una pieza para «nada todavía», «sin resultados» y «no se pudo cargar» | D-13 |
 | «Fit to results» | Que se deshabilite cuando los valores no son del campo elegido | D-4, D-9 |
 | Traductores de Qt | Que `switch_qt_translator` borre el que quita (hoy queda uno muerto por cambio de idioma). Igual en Slip2D | — |
+| El mínimo del espaciado de la rejilla | El diálogo de enganche pide `lo=1e-6` con 4 decimales, y Qt lo redondea a 0: se puede escribir un espaciado 0. Igual en Slip2D. Encontrado con la spec 005 | Regla 7; D-7 |
 | Notas largas en diálogos estrechos | `hold_wrapped_height` mide a la anchura mínima: con una nota muy larga y una anchura mínima pequeña, la altura puede pasar de la pantalla | D-10 |
 
 ## Para después

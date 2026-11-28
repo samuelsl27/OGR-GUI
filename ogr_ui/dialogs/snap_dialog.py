@@ -29,7 +29,6 @@ from PySide6.QtWidgets import (
     QComboBox,
     QDialog,
     QDialogButtonBox,
-    QDoubleSpinBox,
     QFormLayout,
     QGroupBox,
     QLabel,
@@ -39,6 +38,7 @@ from PySide6.QtWidgets import (
 from ogr_ui.data_tip_mode import DataTipMode
 from ogr_ui.i18n import tr
 from ogr_ui.dialog_size import hold_wrapped_height
+from ogr_ui.widgets.number_box import NumberBox
 
 _TIP_LABELS = [
     (DataTipMode.NONE, "None"),
@@ -48,7 +48,9 @@ _TIP_LABELS = [
 
 
 def _spin(value, lo=0.0, hi=1e6, decimals=3, step=1.0):
-    sp = QDoubleSpinBox()
+    # 0.1.4 (spec 005) -- a decimal point on any machine: a Qt box on a
+    # Spanish one read «2.5» as 25
+    sp = NumberBox()
     sp.setDecimals(decimals)
     sp.setRange(lo, hi)
     sp.setSingleStep(step)
