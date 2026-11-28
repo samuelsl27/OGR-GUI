@@ -32,7 +32,7 @@ suite entera en verde. Una tarea cada vez.
   Cubre RF-5, RF-6, RF-8, RF-9, RF-10 y RF-11.
   - Hecho cuando: esas clases, `test_point_entry_v013`, `test_status_bar_v010`, `test_i18n_v010` y
     `test_text_census_v010` están en verde, y la suite entera está en verde.
-- [ ] **T3** Documentación de la versión, RF-1–RF-11:
+- [x] **T3** Documentación de la versión, RF-1–RF-11:
   - la versión a `0.2.0.dev0`;
   - `docs/changelog/PENDIENTE_v0.2.0.md`, renombrado a `CHANGELOG_v0.2.0.md` en el commit de la
     versión: qué se encontró, qué deja de leerse, los tests que cambiaron y qué tiene que cambiar

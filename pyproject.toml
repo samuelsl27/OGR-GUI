@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "ogr-gui"
 # Its own series from 0.1.0. The pieces come from OGR Slip2D v0.1.486
 # (commit 03b6c2d), copied without touching it (ADR-0005 of OGR FEM2D).
-version = "0.1.4"
+version = "0.2.0.dev0"
 description = "OGR GUI — the interface pieces the programs of the OpenGeoRock Suite share: themes, icons, tr(), snap engine, status bar, legend, contours, background tasks"
 readme = "README.md"
 requires-python = ">=3.11"
